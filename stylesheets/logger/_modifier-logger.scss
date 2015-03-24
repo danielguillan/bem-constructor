@@ -1,0 +1,94 @@
+// -----------------------------------------------------------------------------
+// Modifier Logger
+// -----------------------------------------------------------------------------
+
+/// Find if the given $modifiers have already been created
+/// @param {Arglist | String} $modifiers - A single or multiple modifier names
+
+@function modifier-exists($modifiers...) {
+
+    // Get the current block name
+    // Then get the current block map
+    // Then get the current block modifiers map
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-modifiers: map-get($current-block, 'modifiers');
+
+    @each $modifier in $modifiers {
+        @if map-has-key($current-modifiers, $modifier) {
+            @return true;
+        }
+    }
+
+    @return false;
+}
+
+/// Log the new $modifiers
+/// @param {Arglist | String} $modifiers - A single or multiple modifier names
+
+
+@function _bem-log-modifier($modifiers...) {
+
+    // Check if the modifier has already been defined for the current block or element
+    @if modifier-exists($modifiers...) {
+        @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+    }
+
+    // Find the current block name
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-item-name: $current-block-name;
+
+    // Get the map for the current block
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-item: $current-block;
+
+    // Get the map for the current block modifiers
+    $current-block-modifiers: map-get($current-block, 'modifiers');
+    $current-item-modifiers: $current-block-modifiers;
+
+    // Check whether the current context is a block or an element
+    $context-type: if(map-get($_bem-current-context, 'element') == null, 'block', 'element');
+
+    // Update item modifier list if within an Element
+    @if $context-type == 'element' {
+        // @todo: should work if there are multiple current items
+        $current-item-name: nth(map-get(map-get($_bem-current-context, 'element'), 'name'),1);
+        $current-item: map-get(map-get($current-block, 'elements'), $current-item-name);
+        $current-item-modifiers: map-get($current-item, 'modifiers');
+    }
+
+    // For each possible name in $name
+    @each $modifier in $modifiers {
+
+        // Create an updated block/element map
+        $updated: ();
+
+        @if $context-type == 'element' {
+            $updated: (#{$modifier}: ('modified-by': ()))
+        } @else {
+            $modifies-element: map-get($_bem-current-context, 'modifies-element');
+            $updated: (#{$modifier}: ('modifies-element': ()));
+        }
+
+        // Add it to the list of modifiers
+        $current-item-modifiers: map-merge($current-item-modifiers, $updated);
+    }
+
+    $updated-block: ();
+
+    @if $context-type == 'element' {
+        // update the element map;
+        $updated-item: (#{$current-item-name}: ('modifiers': $current-item-modifiers));
+        // @error $updated-item;
+        $updated-elements: map-merge(map-get($current-block, 'elements'), $updated-item);
+        $updated-block: (#{$current-block-name}: ('modifiers': map-get($current-block, 'modifiers'), 'elements': $updated-elements));
+    } @else {
+        $updated-block: (#{$current-block-name}: ('modifiers': ($current-item-modifiers), 'elements': map-get($current-block, 'elements')));;
+    }
+
+    // // Update the log
+    $_bem-log: map-merge($_bem-log, $updated-block) !global;
+
+    @return true;
+
+}

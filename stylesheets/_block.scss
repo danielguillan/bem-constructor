@@ -1,0 +1,91 @@
+// -----------------------------------------------------------------------------
+// Block constructor
+// -----------------------------------------------------------------------------
+
+/// Set namespaces for each block type
+/// @public
+
+$bem-block-namespaces: (
+    'utility': 'u',
+    'object': 'o',
+    'component': 'c',
+) !default;
+
+/// Initializes a new block object
+/// @private
+/// @param {String} $block  - Name for the new block
+/// @param {String} $type   - Block type: (utility, object or component)
+/// @returns The final selector for the new block object
+
+@function _block($name, $type) {
+
+    // Log new block
+    $new-block: _bem-log-block($name);
+
+    // Error check
+    $outside-check: should-not-be-called-within('scope', 'block');
+
+    // Set namespace
+    $namespace: '';
+
+    @if $bem-use-namespaces {
+        @if not map-has-key($bem-block-namespaces, $type) {
+            @error '`#{$type}` is not a valid `$type` for `block()`';
+        }
+        $namespace: map-get($bem-block-namespaces, $type) + '-';
+    }
+
+    $selector: '.' + $namespace + $name;
+    $set-current: set-current-context('block', $name, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates a block object with the given type
+/// @param {String} $block  - Name for the new block
+/// @param {String} $type   - Block type: (utility, object or component)
+
+@mixin block($name, $type) {
+
+    // Write block selector
+    @at-root #{_block($name, $type)} {
+        @content;
+    }
+
+    // Clear $_bem-current-context block after creation
+    $unset-current: unset-current-context('block');
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Utility alias
+// -----------------------------------------------------------------------------
+
+@mixin utility($name) {
+    @include block($name, 'utility') {
+        @content;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 3. Object alias
+// -----------------------------------------------------------------------------
+
+@mixin object($name) {
+  @include block($name, 'object') {
+    @content;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// 4. Component alias
+// -----------------------------------------------------------------------------
+
+@mixin component($name) {
+  @include block($name, 'component') {
+    @content;
+  }
+}

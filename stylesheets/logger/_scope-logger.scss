@@ -1,0 +1,30 @@
+// -----------------------------------------------------------------------------
+// Scope Logger
+// -----------------------------------------------------------------------------
+
+/// Find if a given $scope has already been created
+/// @param {String} $scope - Name of the scope
+
+@function scope-exists($scope) {
+    @return map-has-key($_bem-log, $scope);
+}
+
+/// Log the new $scope
+/// @param {String} $scope - scope name
+
+@function _bem-log-scope($scope) {
+
+    // Check if the scope has already been created
+    @if scope-exists($scope) {
+        @error '`#{$scope}` scope has already been created';
+    }
+
+    // Initialize a new scope map
+    $new-scope: ($scope: ());
+
+    // Update bem log with new scope
+    $_bem-log: map-merge($_bem-log, $new-scope) !global;
+
+    // Everything OK
+    @return true;
+}

@@ -1,0 +1,33 @@
+// -----------------------------------------------------------------------------
+// Theme constructor
+// -----------------------------------------------------------------------------
+
+$bem-theme-namespace: 't' !default;
+
+@function _theme($themes...) {
+
+    // If you try to hack a hack you can break the internet.
+    // So please, no one try it.
+    $recursive-test: should-not-be-called-recursively('theme');
+
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $bem-theme-namespace + '-', '');
+
+    @each $theme in $themes {
+      $t: selector-nest('.#{$namespace}#{$theme}', &);
+      $selector: append($selector, $t, 'comma');
+    }
+
+    $set-current: set-current-context('theme', $themes, $selector);
+
+    @return $selector;
+}
+
+@mixin theme($themes...) {
+
+    @at-root #{_theme($themes...)} {
+      @content;
+    }
+
+    $unset-current: unset-current-context('theme');
+}

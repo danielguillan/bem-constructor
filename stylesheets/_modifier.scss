@@ -1,0 +1,49 @@
+// ----------------------------------------------------------------------
+// Modifier constructor
+// ----------------------------------------------------------------------
+
+/// Initializes a new modifier for the current block or element(s)
+/// @private
+/// @param {String | Arglist} $modifiers - List of new modifier names
+/// @returns The final selector for the new modifier(s)
+
+
+@function _modifier($modifiers...) {
+
+    // Log new modifier(s)
+    $new-modifier: _bem-log-modifier($modifiers...);
+
+    // Error checks
+    $inside-check: _should-be-called-within('block');
+    $outside-check: _should-not-be-called-within('modifier');
+
+    $selector: ();
+
+    @each $modifier in $modifiers {
+        $new-selector: ();
+
+        @each $sel in & {
+            $modified-selector: #{$sel}#{$bem-modifier-separator}#{$modifier};
+            $new-selector: append($new-selector, $modified-selector, 'comma');
+        }
+
+        $selector: append($selector, $new-selector, 'comma');
+    }
+
+    $set-current: set-current-context('modifier', $modifiers, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates new modifier(s)
+/// @param {String | Arglist} $modifiers  - Name of the new modifier(s)
+
+@mixin modifier($modifiers...) {
+
+    @at-root #{_modifier($modifiers...)} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('modifier');
+}

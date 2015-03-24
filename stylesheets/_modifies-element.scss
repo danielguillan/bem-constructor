@@ -1,0 +1,37 @@
+// ----------------------------------------------------------------------
+// Element modifier
+// ----------------------------------------------------------------------
+
+/// Scopes the @content ruleset to an element of the block being modified
+/// @private
+/// @param {String | Arglist} $modified-elements - List of elements that should be modified
+/// @returns The final selector for the element(s) modified by the block modifier
+
+@function _modifies-element($modified-element...) {
+
+    $inside-check: should-be-called-within('modifier', 'state');
+    $outside-check: should-not-be-called-within('element');
+
+    $selectors: ();
+
+    @each $element in $modified-element {
+        $element: map-get(map-get($_bem-current-context, 'block'), 'selector') + $bem-element-separator + $element;
+        $selectors: append($selectors, $element, 'comma');
+    }
+
+    $selector: selector-nest(&, $selectors);
+
+    $set-current: set-current-context('modifies-element', $modified-element, $selector);
+
+    @return $selector;
+}
+
+
+/// Scopes the @content ruleset to an element of the block being modified
+/// @param {String | Arglist} $modified-elements - Name of the element(s) that should be modified
+
+@mixin modifies-element($modified-elements...) {
+    @at-root #{_modifies-element($modified-elements...)} {
+        @content;
+    }
+}

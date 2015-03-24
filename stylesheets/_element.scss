@@ -1,0 +1,43 @@
+// ----------------------------------------------------------------------
+// Element constructor
+// ----------------------------------------------------------------------
+
+/// Initializes a new element for the current block
+/// @private
+/// @param {String | Arglist} $elements - List of new element names
+/// @returns The final selector for the new element(s)
+
+@function _element($elements...) {
+
+    // Log new element(s)
+    $new-element: _bem-log-element($elements...);
+
+    // Error checks
+    $inside-check: should-be-called-within('block');
+    $outside-check: should-not-be-called-within('modifier', 'state', 'element');
+
+    $selector: ();
+
+    @each $element in $elements {
+        $e: #{&}#{$bem-element-separator}#{$element};
+        $selector: append($selector, $e, 'comma');
+    }
+
+    $set-current: set-current-context('element', $elements, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates new element(s)
+/// @param {String | Arglist} $elements  - Name of the new element(s)
+
+@mixin element($elements...) {
+
+    @at-root #{_element($elements...)} {
+        @content;
+    }
+
+    // Clear $_bem-current-context element after creation
+    $unset-current: unset-current-context('element');
+}

@@ -1,0 +1,37 @@
+// -----------------------------------------------------------------------------
+// BEM constructor
+// -----------------------------------------------------------------------------
+// Table of contents
+// 1. Default settings
+// 2. Imports
+
+// -----------------------------------------------------------------------------
+// 1. Default settings
+// -----------------------------------------------------------------------------
+
+/// Use namespaced class names
+/// @public
+$bem-use-namespaces: true !default;
+
+/// Bem style element separator
+/// @public
+$bem-element-separator: '__' !default;
+
+/// Bem style modifier separator
+/// @public
+$bem-modifier-separator: '--' !default;
+
+// -----------------------------------------------------------------------------
+// 2. Imports
+// -----------------------------------------------------------------------------
+
+@import 'logger';
+@import 'error-checks';
+@import 'block';
+@import 'element';
+@import 'modifier';
+@import 'modifies-element';
+@import 'scope';
+@import 'theme';
+@import 'state';
+@import 'hack';

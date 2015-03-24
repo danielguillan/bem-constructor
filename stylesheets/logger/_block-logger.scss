@@ -1,0 +1,30 @@
+// -----------------------------------------------------------------------------
+// Block Logger
+// -----------------------------------------------------------------------------
+
+/// Find if a given $block has already been created
+/// @param {String} $block - Name of the block
+
+@function block-exists($block) {
+    @return map-has-key($_bem-log, $block);
+}
+
+/// Log the new $block
+/// @param {String} $block - Block name
+
+@function _bem-log-block($block) {
+
+    // Check if the block has already been created
+    @if block-exists($block) {
+        @error '`#{$block}` block has already been created';
+    }
+
+    // Initialize a new block map
+    $new-block: ($block: ('elements': (), 'modifiers': ()));
+
+    // Update bem log with new block
+    $_bem-log: map-merge($_bem-log, $new-block) !global;
+
+    // Everything OK
+    @return true;
+}

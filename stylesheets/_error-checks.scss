@@ -1,0 +1,50 @@
+// -----------------------------------------------------------------------------
+// Error checks
+// -----------------------------------------------------------------------------
+// Table of contents:
+// 1. Within
+// 2. Outside
+
+// -----------------------------------------------------------------------------
+// 1. Within
+// -----------------------------------------------------------------------------
+
+/// Checks that it's being created within all of the passed $objs...
+@function _should-be-called-within($objs...) {
+
+    $found: false;
+
+    @each $obj in $objs {
+        @if map-get($_bem-current-context, $obj) != null {
+            $found: true;
+        }
+    }
+
+    @if not $found {
+        @error 'It should be called within #{inspect($objs)}';
+    }
+
+    @return true;
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Outside
+// -----------------------------------------------------------------------------
+
+/// Checks that it's being created outside all of the passed $objs...
+@function _should-not-be-called-within($objs...) {
+
+  $found: false;
+
+  @each $obj in $objs {
+    @if map-get($_bem-current-context, $obj) != null {
+      $found: true;
+    }
+  }
+  @if $found {
+    @error 'It should not be called within #{inspect($objs)}';
+  }
+
+  @return true;
+}

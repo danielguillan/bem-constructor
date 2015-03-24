@@ -1,0 +1,40 @@
+// -----------------------------------------------------------------------------
+// Context logger
+// -----------------------------------------------------------------------------
+// Table of contents:
+// 1. Store current context
+// 2. Clear current context
+
+
+/// Used to stores the current object being constructed
+/// @private
+
+$_bem-current-context: () !global;
+
+
+// -----------------------------------------------------------------------------
+// 1. Store current context
+// -----------------------------------------------------------------------------
+
+/// Sets the current object, stores name and generated selector
+
+@function set-current-context($obj, $name, $selector) {
+    $new-current: (#{$obj}: (name: $name, selector: $selector));
+    $_bem-current-context: map-merge($_bem-current-context, $new-current) !global;
+
+    @return $selector;
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Clear current context
+// -----------------------------------------------------------------------------
+
+/// Clears the current object
+
+@function unset-current-context($obj) {
+    $new-current: (#{$obj}: null);
+    $_bem-current-context: map-merge($_bem-current-context, $new-current) !global;
+
+    @return null;
+}

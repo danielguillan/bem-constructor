@@ -1,0 +1,40 @@
+// -----------------------------------------------------------------------------
+// Scope constructor
+// -----------------------------------------------------------------------------
+
+/// Set namespace for scopes
+/// @public
+
+$bem-scope-namespace: 's';
+
+/// Initializes a new scope object
+/// @private
+/// @param {String} $scope  - Name for the new scope
+/// @returns The final selector for the new scope object
+
+@function _scope($scope) {
+
+    // Log new block
+    $new-scope: _bem-log-scope($scope);
+
+    // Check it's not called inside another scope
+    // and it's called at the root-level
+    $recursive-check: should-not-be-called-recursively('scope');
+    $outside-check: should-not-be-called-within('block');
+
+    $namespace: if($bem-use-namespaces, $bem-scope-namespace + '-', '');
+    $selector: '.' + $namespace + $scope;
+
+    $set-current: set-current-context('scope', $scope, $selector);
+
+    @return $selector;
+}
+
+@mixin scope($scope) {
+
+    @at-root #{_scope($scope)} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('scope');
+}

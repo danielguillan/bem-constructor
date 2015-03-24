@@ -1,0 +1,38 @@
+// -----------------------------------------------------------------------------
+// 11. Hack constructor
+// -----------------------------------------------------------------------------
+
+/// Hack namespace prepended to the selector
+$hack-namespace: '_' !default;
+
+@function _hack() {
+
+    // You may not hack a hack
+    $recursive-check: should-not-be-called-recursively('hack');
+
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $hack-namespace, '');
+
+    @each $s in & {
+        $selector-to-str: inspect(nth($s, 1));
+        $selector-without-dot: str-slice($selector-to-str, 2, -1);
+        $new-selector: '.' + $namespace + $selector-without-dot;
+        $sl: selector-replace($s, nth($s, 1), $new-selector);;
+        $selector: append($selector, $sl, 'comma');
+    }
+
+    $set-current: set-current-context('hack', 'some-hack', $selector);
+
+    @return $selector;
+
+}
+
+@mixin hack() {
+
+    @at-root #{_hack()} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('hack');
+
+}

@@ -1,0 +1,59 @@
+@import 'bem-constructor';
+
+// The Burger Test™
+
+@include object('burger') {
+    texture: juicy;
+
+    @include element('letuce', 'tomato') {
+        quality: fresh;
+    }
+
+    @include element('cheese') {
+        type: gouda;
+
+        @include modifier('parmigiano') {
+            type: parmigiano;
+        }
+    }
+
+    @include element('extra-topping') {
+        ingredient: bacon;
+    }
+
+    @include element('meat') {
+        type: beef;
+    }
+
+    @include modifier('veggie') {
+        texture: smooth;
+
+        @include modifies-element('meat') {
+            type: lentils;
+        }
+
+        @include modifies-element('extra-topping') {
+            ingredient: avocado;
+
+            @include hack() {
+                ingredient: bacon;
+            }
+        }
+    }
+
+    @include theme('mexican') {
+        spicy: hell-yeah;
+    }
+
+    @include state('cold') {
+        taste: terrible;
+    }
+}
+
+// @include scope(test) {
+//     a: shite
+// }
+
+// .bem-log {
+//     log: inspect($_bem-log);
+// }

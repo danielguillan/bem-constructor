@@ -1,0 +1,59 @@
+// -----------------------------------------------------------------------------
+// Element Logger
+// -----------------------------------------------------------------------------
+
+/// Find if the given $elements have already been created
+/// @param {Arglist | String} $elements - A single or multiple element names
+
+@function element-exists($elements...) {
+
+    // Get the current block name
+    // Then get the current block map
+    // Then get the current block element map
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-elements: map-get($current-block, 'elements');
+
+    @each $element in $elements {
+        @if map-has-key($current-elements, $element) {
+            @return true;
+        }
+    }
+
+    @return false;
+}
+
+
+/// Log the new $elements
+/// @param {Arglist | String} $elements - A single or multiple element names
+
+@function _bem-log-element($elements...) {
+
+    // Check any $elements has already been defined for the current block
+    @if element-exists($elements...) {
+        @error 'One or more elements from `#{inspect($elements)}` have already been created';
+    }
+
+    // Find the current block name
+    // Then get the map for the current block
+    // Then get the element list
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-elements: map-get($current-block, 'elements');
+
+    // For each possible name in $name
+    // Create an updated block map
+    // Add it to the list of elements
+    @each $element in $elements {
+        $updated: ($element: ('modifiers': ()));
+        $current-elements: map-merge($current-elements, $updated);
+    }
+
+    // Update the block
+    $updated-block: ($current-block-name: ('elements': ($current-elements), 'modifiers': map-get($current-block, 'modifiers')));
+
+    // Update the log
+    $_bem-log: map-merge($_bem-log, $updated-block) !global;
+
+    @return true;
+}

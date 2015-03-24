@@ -1,0 +1,12 @@
+// -----------------------------------------------------------------------------
+// Logger
+// -----------------------------------------------------------------------------
+
+/// Stores the whole BEM structure
+$_bem-log: () !global;
+
+@import 'logger/_context-logger';
+@import 'logger/_block-logger';
+@import 'logger/_element-logger';
+@import 'logger/_modifier-logger';
+@import 'logger/_scope-logger';
