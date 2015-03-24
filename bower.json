@@ -1,0 +1,7 @@
+{
+    "name": "bem-constructor",
+    "version": "0.1.0",
+    "main": "_bem-constructor.scss",
+    "author": "Daniel Guillan",
+    "ignore": ["*","!stylesheets/*"]
+}
