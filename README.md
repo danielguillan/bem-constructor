@@ -6,8 +6,6 @@ By enforcing a consistent and programatic way of defining objects (blocks, eleme
 
 Jump to [🍔 The Burger Example™](#example) to see the mixins in action.
 
-----
-
 ## Key ideas
 
 The key ideas behind this library are well explained by Harry Roberts in his articles [Immutable CSS](http://csswizardry.com/2015/03/immutable-css/), [More Transparent UI Code with Namespaces](http://csswizardry.com/2015/03/more-transparent-ui-code-with-namespaces/) and [MindBEMding – getting your head ’round BEM syntax](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/),
@@ -18,7 +16,7 @@ Some CSS objects in your project shouldn't be able to change (mutate). They have
 
 ### 2. Namespacing
 
-Objects have a clear function. Whethere they are components, utilities o dirty hacks, we need a consistent way of telling them apart. By namespacing objects, our UI code becomes more transparent and understandable.  BEM Constructor supports the following object types:
+Objects have a clear function. Whether they are components, utilities o dirty hacks, we need a consistent way of telling them apart. By namespacing objects, our UI code becomes more transparent and understandable.  BEM Constructor supports the following object types:
 
 - Objects
 - Components
@@ -34,8 +32,6 @@ Read [Harry's post on namespaces](http://csswizardry.com/2015/03/more-transparen
 ### 3. BEM structure
 
 BEM objects are composed of a block and any number of elements and/or modifiers. Using the BEM syntax for naming classes you'll produce structured code that helps you and other developers understand at a glance the relationship between those classes. The BEM constructor takes care of generating bem-compliant selectors.
-
-----
 
 ## Installation
 
@@ -55,8 +51,6 @@ Run the following command:
 
 1. `gem install bem-constructor`
 2. Add `require 'bem-constructor'` to your `config.rb`
-
-----
 
 ## Usage
 
@@ -132,36 +126,33 @@ Scopes allow you to isolate code you don't have control over.
 
     @include scope($name) { ... }
 
-
-----
-
 ## Options
 
 ### Namespaces
 
 Switch namespaces on/off by setting the following variable:
 
-	$bem-use-namespaces: false; // defaults to true
+    $bem-use-namespaces: false; // defaults to true
 
 Override the default block namespaces:
 
-	$bem-block-namespaces: (
-	    'object': 'obj',     // defaults to 'o'
-	    'component': 'comp', // defaults to 'c'
-	    'utility': 'helper', // defaults to 'u'
-	);
+    $bem-block-namespaces: (
+        'object': 'obj',     // defaults to 'o'
+        'component': 'comp', // defaults to 'c'
+        'utility': 'helper', // defaults to 'u'
+    );
 
 Override the default theme namespace:
 
-	$bem-theme-namespace: 'theme'; // defaults to 't'
+    $bem-theme-namespace: 'theme'; // defaults to 't'
 
 Override the default state namespace:
 
-	$bem-state-namespace: 'has'; // defaults to 'is'
+    $bem-state-namespace: 'has'; // defaults to 'is'
 
 Override the default hack namespace:
 
-	$bem-hack-namespace: 'it-wasnt-me-'; // defaults to '_'
+    $bem-hack-namespace: 'it-wasnt-me-'; // defaults to '_'
 
 
 
@@ -173,20 +164,17 @@ By default BEM Constructor uses the following BEM convention:
 
 You can customize them to whatever fits you needs:
 
-	$bem-element-separator: '-'; // Defaults to '__'
+    $bem-element-separator: '-'; // Defaults to '__'
 
-	$bem-modifier-separator: '-_-_'; // Defaults to '--'
+    $bem-modifier-separator: '-_-_'; // Defaults to '--'
 
-
-
-----
 
 ##<a name="example"></a> 🍔 The Burger Example™
 
 
 *Disclaimer: the following Sass code may not compile into a real burger.*
 
-```` scss
+````scss
 
     @include object('burger') {
         texture: juicy;
@@ -235,15 +223,16 @@ You can customize them to whatever fits you needs:
             taste: terrible;
         }
     }
+````
 
 The compiled CSS:
 
-```` css
+````css
 
     /* The main Burger object */
     .o-burger { texture: juicy; }
 
-    /* lettuce and Tomato elements */
+    /* Lettuce and Tomato elements */
     .o-burger__lettuce, .o-burger__tomato { quality: fresh; }
 
     /* Cheese element */
@@ -267,15 +256,15 @@ The compiled CSS:
     /* Veggie Burger block modifier modifies the Extra Topping element too */
     .o-burger--veggie .o-burger__extra-topping { ingredient: avocado; }
 
-    /* But we are hackers and couldn't resist adding some Bacon back */
+    /* But as hackers we couldn't resist the urge to add some Bacon back */
     ._o-burger--veggie .o-burger__extra-topping { ingredient: bacon; }
 
     /* When the party Theme is Mexican, we make everything spicy */
     .t-mexican .o-burger { spicy: hell-yeah; }
 
-    /* And we're all sad when the burge Is Cold */
+    /* And we're all sad when a burger Is Cold */
     .o-burger.is-cold { taste: terrible; }
-
+````
 
 ## This is overkill, who is this for?
 
