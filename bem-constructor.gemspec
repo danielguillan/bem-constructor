@@ -2,8 +2,8 @@ require './lib/bem-constructor'
 
 Gem::Specification.new do |s|
   # Release Specific Information
-  s.version = QuantityQueries::VERSION
-  s.date = QuantityQueries::DATE
+  s.version = BEMConstructor::VERSION
+  s.date = BEMConstructor::DATE
 
   # Gem Details
   s.name = "bem-constructor"
