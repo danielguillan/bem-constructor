@@ -1,0 +1,22 @@
+@include describe("The _element function") {
+
+    // Single element
+
+    @include it("should generate a selector for the block element") {
+        @include block('element-test-block', 'object') {
+            @include should( expect( _element('name') ), to( be( '.o-element-test-block__name' )));
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    // Multiple elements
+
+    @include it("should generate multiple selectors for the block element") {
+        @include block('element-test-block2', 'object') {
+            @include should( expect( _element('name1' , 'name2') ), to( be( ('.o-element-test-block2__name1', '.o-element-test-block2__name2') )));
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+}

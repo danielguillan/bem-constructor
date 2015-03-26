@@ -1,0 +1,8 @@
+@include describe("The _scope function") {
+
+    @include it("should generate a scope namespaced selector") {
+        @include should( expect( #{_scope('name')} ), to( be( '.s-name' )));
+        $unset-current: unset-current-context('scope');
+    }
+
+}

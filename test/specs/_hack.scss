@@ -1,0 +1,23 @@
+@include describe("The _hack function") {
+
+    @include it("should generate a hack selector for the current block") {
+        @include block('hack-test-block', 'object') {
+            @include should( expect( #{_hack()} ), to( be( '._o-hack-test-block' )));
+            $unset-current: unset-current-context('hack');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a hack selector for multiple selectors") {
+        @include block('hack-test-block2', 'object') {
+            @include element('element1', 'element2') {
+                @include should( expect( #{_hack()} ), to( be( '._o-hack-test-block2__element1, ._o-hack-test-block2__element2' )));
+            }
+            $unset-current: unset-current-context('hack');
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+
+}

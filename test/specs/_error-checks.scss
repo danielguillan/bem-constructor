@@ -1,0 +1,26 @@
+$_bem-current-context: (
+    'block': 'some-block',
+    'element': 'some-element',
+    'modifier': 'some-modifier'
+    ) !global;
+
+@include describe("The _should-not-be-called-within function") {
+
+    //@include it("should return true when ")
+
+    // @include it("should generate a object namespaced selector for a given block") {
+    //     @include should( expect( _block('block1', 'object') ), to( be( '.o-block1' )));
+    //     $unset-current: unset-current-context('block');
+    // }
+
+    // @include it("should generate a component namespaced selector for a given block") {
+    //     @include should( expect( _block('block2', 'component') ), to( be( '.c-block2' )));
+    //     $unset-current: unset-current-context('block');
+    // }
+
+    // @include it("should generate a utility namespaced selector for a given block") {
+    //     @include should( expect( _block('block3', 'utility') ), to( be( '.u-block3' )));
+    //     $unset-current: unset-current-context('block');
+    // }
+
+}

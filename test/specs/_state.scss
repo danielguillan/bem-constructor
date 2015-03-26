@@ -1,0 +1,34 @@
+@include describe("The _state function") {
+
+    @include it("should generate a state selector for the current block") {
+        @include block('state-test-block', 'object') {
+            @include should( expect( #{_state('state')} ), to( be( '.o-state-test-block.is-state' )));
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a state selector for multiple selectors") {
+        @include block('state-test-block2', 'object') {
+            @include element('element1', 'element2') {
+                @include should( expect( #{_state('state')} ), to( be( '.o-state-test-block2__element1.is-state, .o-state-test-block2__element2.is-state' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate multiple compound state selector for multiple selectors") {
+        @include block('state-test-block3', 'object') {
+            @include element('element1', 'element2') {
+                @include should( expect( #{_state('state1', 'state2')} ), to( be( '.o-state-test-block3__element1.is-state1, .o-state-test-block3__element2.is-state1, .o-state-test-block3__element1.is-state2, .o-state-test-block3__element2.is-state2' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+
+}

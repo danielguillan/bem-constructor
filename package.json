@@ -1,0 +1,22 @@
+{
+  "name": "bem-constructor",
+  "author": "Daniel Guillan",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielguillan/bem-constructor"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielguillan/bem-constructor/issues"
+  },
+  "homepage": "https://github.com/danielguillan/bem-constructor",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-sass": "^0.8.1",
+    "bootcamp": "^1.1.7",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

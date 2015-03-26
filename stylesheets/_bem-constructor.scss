@@ -21,6 +21,12 @@ $bem-element-separator: '__' !default;
 /// @public
 $bem-modifier-separator: '--' !default;
 
+/// Throw errors
+/// @public
+$bem-throw-errors: true !default;
+
+
+
 // -----------------------------------------------------------------------------
 // 2. Imports
 // -----------------------------------------------------------------------------

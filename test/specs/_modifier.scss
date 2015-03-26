@@ -1,0 +1,52 @@
+@include describe("The _modifier function") {
+
+    @include it("should generate a modifier selector for the current block") {
+        @include block('modifier-test-block', 'object') {
+            @include should( expect( #{_modifier('modifier')} ), to( be( '.o-modifier-test-block--modifier' )));
+            $unset-current: unset-current-context('modifier');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a modifier selector for the current element") {
+        @include block('modifier-test-block2', 'object') {
+            @include element('element') {
+                @include should( expect( #{_modifier('modifier')} ), to( be( '.o-modifier-test-block2__element--modifier' )));
+                $unset-current: unset-current-context('modifier');
+                $unset-current: unset-current-context('element');
+                $unset-current: unset-current-context('block');
+            }
+        }
+    }
+
+    @include it("should generate multiple modifier selectors for the current block") {
+        @include block('modifier-test-block3', 'object') {
+            @include should( expect( #{_modifier('modifier1', 'modifier2')} ), to( be( '.o-modifier-test-block3--modifier1, .o-modifier-test-block3--modifier2' )));
+            $unset-current: unset-current-context('modifier');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate multiple modifier selectors for the current element") {
+        @include block('modifier-test-block4', 'object') {
+            @include element('element') {
+                @include should( expect( #{_modifier('modifier1', 'modifier2')} ), to( be( '.o-modifier-test-block4__element--modifier1, .o-modifier-test-block4__element--modifier2' )));
+                $unset-current: unset-current-context('modifier');
+                $unset-current: unset-current-context('element');
+                $unset-current: unset-current-context('block');
+            }
+        }
+    }
+
+    @include it("should generate multiple modifier selectors for multiple elements") {
+        @include block('modifier-test-block5', 'object') {
+            @include element('element1', 'element2') {
+                @include should( expect( #{_modifier('modifier1', 'modifier2')} ), to( be( '.o-modifier-test-block5__element1--modifier1, .o-modifier-test-block5__element2--modifier1, .o-modifier-test-block5__element1--modifier2, .o-modifier-test-block5__element2--modifier2' )));
+                $unset-current: unset-current-context('modifier');
+                $unset-current: unset-current-context('element');
+                $unset-current: unset-current-context('block');
+            }
+        }
+    }
+
+}
