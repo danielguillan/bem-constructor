@@ -5,6 +5,18 @@
 /// Hack namespace prepended to the selector
 $hack-namespace: '_' !default;
 
+/// Find the last simple selector in a selector
+@function _last-simple-selector($selector) {
+    $parsed: selector-parse($selector);
+
+    @if length($parsed) > 1 {
+      @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+    }
+    $last-simple-selector: nth(nth($parsed, 1), -1);
+
+    @return $last-simple-selector;
+}
+
 @function _hack() {
 
     // You may not hack a hack
@@ -13,11 +25,16 @@ $hack-namespace: '_' !default;
     $selector: ();
     $namespace: if($bem-use-namespaces, $hack-namespace, '');
 
-    @each $s in & {
-        $selector-to-str: inspect(nth($s, 1));
+    // Check if we are hacking an element modified by a block modifier
+    $is-hack-element: not not map-get($_bem-current-context, 'modifies-element');
+    $selectors: if($is-hack-element, map-get(map-get($_bem-current-context, 'modifies-element'), 'selector'), &);
+
+    // @todo refactor the following code to something more readab
+    @each $s in $selectors {
+        $selector-to-str: inspect(if($is-hack-element, _last-simple-selector($s), nth($s, 1)));
         $selector-without-dot: str-slice($selector-to-str, 2, -1);
         $new-selector: '.' + $namespace + $selector-without-dot;
-        $sl: selector-replace($s, nth($s, 1), $new-selector);;
+        $sl: selector-replace($s, if($is-hack-element, $selector-to-str, nth($s, 1)), $new-selector);
         $selector: append($selector, $sl, 'comma');
     }
 

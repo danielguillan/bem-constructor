@@ -15,15 +15,12 @@ $bem-theme-namespace: 't' !default;
 
     @each $theme in $themes {
         @each $sel in & {
-            @debug $sel;
             $t: selector-nest('.#{$namespace}#{$theme}', $sel);
             $selector: append($selector, $t, 'comma');
         }
     }
 
     $set-current: set-current-context('theme', $themes, $selector);
-
-    @debug $selector;
 
     @return $selector;
 }
