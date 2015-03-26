@@ -4,7 +4,7 @@ BEM Constructor is a Sass library for building immutable and namespaced BEM-styl
 
 By enforcing a consistent and programatic way of defining objects (blocks, elements and modifiers) it ensures a more structured, robust and secure object codebase that is easy to understand and maintain. Objects defined using the constructor are impossible to modify and reassign by mistake or omission.
 
-Jump to [🍔 The Burger Example™](#example) to see the mixins in action.
+Jump to [:hamburger: The Burger Example™](#example) to see the mixins in action.
 
 ## Key ideas
 
@@ -169,7 +169,7 @@ You can customize them to whatever fits you needs:
     $bem-modifier-separator: '-_-_'; // Defaults to '--'
 
 
-##<a name="example"></a> 🍔 The Burger Example™
+##<a name="example"></a> :hamburger: The Burger Example™
 
 
 *Disclaimer: the following Sass code may not compile into a real burger.*
