@@ -1,4 +1,4 @@
-/*! bem-constructor - v0.3.0 - 2015-03-26 */
+/*! bem-constructor - v0.3.2 - 2015-03-26 */
 // -----------------------------------------------------------------------------
 // Defaults
 // -----------------------------------------------------------------------------
@@ -85,7 +85,10 @@ $_bem-current-context: () !global;
 
     // Check if the block has already been created
     @if block-exists($block) {
-        @error '`#{$block}` block has already been created';
+        @if $bem-throw-errors {
+            @error '`#{$block}` block has already been created';
+        }
+        @return false;
     }
 
     // Initialize a new block map
@@ -131,7 +134,11 @@ $_bem-current-context: () !global;
 
     // Check any $elements has already been defined for the current block
     @if element-exists($elements...) {
-        @error 'One or more elements from `#{inspect($elements)}` have already been created';
+        @if $bem-throw-errors {
+            @error 'One or more elements from `#{inspect($elements)}` have already been created';
+        }
+
+        @return false;
     }
 
     // Find the current block name
@@ -191,7 +198,11 @@ $_bem-current-context: () !global;
 
     // Check if the modifier has already been defined for the current block or element
     @if modifier-exists($modifiers...) {
-        @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+        @if $bem-throw-errors {
+            @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+        }
+
+        @return false;
     }
 
     // Find the current block name
@@ -271,7 +282,11 @@ $_bem-current-context: () !global;
 
     // Check if the scope has already been created
     @if scope-exists($scope) {
-        @error '`#{$scope}` scope has already been created';
+        @if $bem-throw-errors {
+            @error '`#{$scope}` scope has already been created';
+        }
+
+        @return false;
     }
 
     // Initialize a new scope map
@@ -298,20 +313,13 @@ $_bem-current-context: () !global;
 /// Checks that it's being created within all of the passed $objs...
 @function _should-be-called-within($objs...) {
 
-    $found: false;
-
     @each $obj in $objs {
-        @if map-get($_bem-current-context, $obj) != null {
-            $found: true;
+        @if map-get($_bem-current-context, $obj) == null {
+            @if $bem-throw-errors {
+                @error 'It should be called within #{inspect($objs)}';
+            }
+            @return false;
         }
-    }
-
-    @if not $found {
-        @if ($bem-throw-error) {
-            @error 'It should be called within #{inspect($objs)}';
-        }
-
-        @return false;
     }
 
     @return true;
@@ -325,19 +333,13 @@ $_bem-current-context: () !global;
 /// Checks that it's being created outside all of the passed $objs...
 @function _should-not-be-called-within($objs...) {
 
-    $found: false;
-
     @each $obj in $objs {
         @if map-get($_bem-current-context, $obj) != null {
-            $found: true;
+            @if $bem-throw-errors {
+                @error 'It should not be called within #{inspect($objs)}';
+            }
+            @return false;
         }
-    }
-
-    @if $found {
-        @if ($bem-throw-error) {
-            @error 'It should not be called within #{inspect($objs)}';
-        }
-        @return false;
     }
 
     @return true;
@@ -368,14 +370,23 @@ $bem-block-namespaces: (
     $new-block: _bem-log-block($name);
 
     // Error check
-    $outside-check: should-not-be-called-within('scope', 'block');
+    $outside-check: _should-not-be-called-within('scope', 'block');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     // Set namespace
     $namespace: '';
 
     @if $bem-use-namespaces {
         @if not map-has-key($bem-block-namespaces, $type) {
-            @error '`#{$type}` is not a valid `$type` for `block()`';
+            @if $bem-throw-errors {
+                @error '`#{$type}` is not a valid `$type` for `block()`';
+            }
+
+            @return false;
         }
         $namespace: map-get($bem-block-namespaces, $type) + '-';
     }
@@ -450,8 +461,13 @@ $bem-block-namespaces: (
     $new-element: _bem-log-element($elements...);
 
     // Error checks
-    $inside-check: should-be-called-within('block');
-    $outside-check: should-not-be-called-within('modifier', 'state', 'element');
+    $inside-check: _should-be-called-within('block');
+    $outside-check: _should-not-be-called-within('modifier', 'state', 'element');
+
+    // Return false in case error throwing is disabled
+    @if $inside-check == false or $outside-check == false {
+        @return false;
+    }
 
     $selector: ();
 
@@ -498,6 +514,11 @@ $bem-block-namespaces: (
     $inside-check: _should-be-called-within('block');
     $outside-check: _should-not-be-called-within('modifier');
 
+    // Return false in case error throwing is disabled
+    @if $inside-check == false or $outside-check == false {
+        @return false;
+    }
+
     $selector: ();
 
     @each $modifier in $modifiers {
@@ -540,8 +561,12 @@ $bem-block-namespaces: (
 
 @function _modifies-element($modified-elements...) {
 
-    $inside-check: should-be-called-within('modifier', 'state');
-    $outside-check: should-not-be-called-within('element');
+    $inside-check: _should-be-called-within('modifier', 'state');
+    $outside-check: _should-not-be-called-within('element');
+
+    @if $inside-check == 'false' or $outside-check == false {
+        @return false;
+    }
 
     $selectors: ();
 
@@ -687,7 +712,10 @@ $hack-namespace: '_' !default;
     $parsed: selector-parse($selector);
 
     @if length($parsed) > 1 {
-      @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+        @if $bem-throw-errors {
+            @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+        }
+        @return false;
     }
     $last-simple-selector: nth(nth($parsed, 1), -1);
 
