@@ -49,4 +49,14 @@
         }
     }
 
+    @include it("should return false or throw error if modifier is created within another modifier") {
+        @include block('modifier-test-block5', 'object') {
+            @include modifier('modifier1') {
+                @include should( expect( _modifier('modifier2') ), to( be( false )));
+            }
+        }
+        $unset-current: unset-current-context('modifier');
+        $unset-current: unset-current-context('block');
+    }
+
 }

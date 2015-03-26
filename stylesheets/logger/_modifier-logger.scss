@@ -31,7 +31,11 @@
 
     // Check if the modifier has already been defined for the current block or element
     @if modifier-exists($modifiers...) {
-        @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+        @if $bem-throw-errors {
+            @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+        }
+
+        @return false;
     }
 
     // Find the current block name

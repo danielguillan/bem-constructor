@@ -16,7 +16,10 @@
 
     // Check if the block has already been created
     @if block-exists($block) {
-        @error '`#{$block}` block has already been created';
+        @if $bem-throw-errors {
+            @error '`#{$block}` block has already been created';
+        }
+        @return false;
     }
 
     // Initialize a new block map

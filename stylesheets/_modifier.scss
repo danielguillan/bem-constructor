@@ -17,6 +17,11 @@
     $inside-check: _should-be-called-within('block');
     $outside-check: _should-not-be-called-within('modifier');
 
+    // Return false in case error throwing is disabled
+    @if $inside-check == false or $outside-check == false {
+        @return false;
+    }
+
     $selector: ();
 
     @each $modifier in $modifiers {

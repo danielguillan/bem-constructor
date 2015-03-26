@@ -10,7 +10,10 @@ $hack-namespace: '_' !default;
     $parsed: selector-parse($selector);
 
     @if length($parsed) > 1 {
-      @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+        @if $bem-throw-errors {
+            @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+        }
+        @return false;
     }
     $last-simple-selector: nth(nth($parsed, 1), -1);
 

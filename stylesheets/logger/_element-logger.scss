@@ -31,7 +31,11 @@
 
     // Check any $elements has already been defined for the current block
     @if element-exists($elements...) {
-        @error 'One or more elements from `#{inspect($elements)}` have already been created';
+        @if $bem-throw-errors {
+            @error 'One or more elements from `#{inspect($elements)}` have already been created';
+        }
+
+        @return false;
     }
 
     // Find the current block name

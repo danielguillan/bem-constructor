@@ -4,7 +4,7 @@
 
     @include it("should generate a selector for the block element") {
         @include block('element-test-block', 'object') {
-            @include should( expect( _element('name') ), to( be( '.o-element-test-block__name' )));
+            @include should( expect( #{_element('element')} ), to( be( '.o-element-test-block__element' )));
             $unset-current: unset-current-context('element');
             $unset-current: unset-current-context('block');
         }
@@ -14,7 +14,37 @@
 
     @include it("should generate multiple selectors for the block element") {
         @include block('element-test-block2', 'object') {
-            @include should( expect( _element('name1' , 'name2') ), to( be( ('.o-element-test-block2__name1', '.o-element-test-block2__name2') )));
+            @include should( expect( #{_element('element1' , 'element2')} ), to( be( '.o-element-test-block2__element1, .o-element-test-block2__element2' )));
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should return false or throw error if element is created within another element") {
+        @include block('element-test-block3', 'object') {
+            @include element('element1') {
+                @include should( expect( _element('element2') ), to( be( false )));
+            }
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should return false or throw error if element is created within a modifier") {
+        @include block('element-test-block4', 'object') {
+            @include modifier('modifier') {
+                @include should( expect( _element('element') ), to( be( false )));
+            }
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should return false or throw error if element is created within a state") {
+        @include block('element-test-block5', 'object') {
+            @include state('state') {
+                @include should( expect( _element('element') ), to( be( false )));
+            }
             $unset-current: unset-current-context('element');
             $unset-current: unset-current-context('block');
         }

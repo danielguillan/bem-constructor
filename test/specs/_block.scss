@@ -15,4 +15,19 @@
         $unset-current: unset-current-context('block');
     }
 
+    @include it("should return false or throw error if block is created within another block") {
+        @include block('block4', 'object') {
+            @include should( expect( _block('block5', 'object') ), to( be( false )));
+        }
+        $unset-current: unset-current-context('block');
+    }
+
+    @include it("should return false or throw error if block is created within a scope") {
+        @include scope('block-test-scope') {
+            @include should( expect( _block('block6', 'object') ), to( be( false )));
+        }
+        $unset-current: unset-current-context('block');
+        $unset-current: unset-current-context('scope');
+    }
+
 }

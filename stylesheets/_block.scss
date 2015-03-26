@@ -23,14 +23,23 @@ $bem-block-namespaces: (
     $new-block: _bem-log-block($name);
 
     // Error check
-    $outside-check: should-not-be-called-within('scope', 'block');
+    $outside-check: _should-not-be-called-within('scope', 'block');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     // Set namespace
     $namespace: '';
 
     @if $bem-use-namespaces {
         @if not map-has-key($bem-block-namespaces, $type) {
-            @error '`#{$type}` is not a valid `$type` for `block()`';
+            @if $bem-throw-errors {
+                @error '`#{$type}` is not a valid `$type` for `block()`';
+            }
+
+            @return false;
         }
         $namespace: map-get($bem-block-namespaces, $type) + '-';
     }

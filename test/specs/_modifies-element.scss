@@ -43,4 +43,14 @@
             $unset-current: unset-current-context('block');
         }
     }
+
+    @include it("should return false or throw error if called within an element") {
+        @include block('modifies-element-test-block5', 'object') {
+            @include element('element') {
+                @include should( expect( _modifies-element('element') ), to( be( false )));
+            }
+            $unset-current: unset-current-context('element');
+            $unset-current: unset-current-context('block');
+        }
+    }
 }

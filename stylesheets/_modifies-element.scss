@@ -9,8 +9,12 @@
 
 @function _modifies-element($modified-elements...) {
 
-    $inside-check: should-be-called-within('modifier', 'state');
-    $outside-check: should-not-be-called-within('element');
+    $inside-check: _should-be-called-within('modifier', 'state');
+    $outside-check: _should-not-be-called-within('element');
+
+    @if $inside-check == 'false' or $outside-check == false {
+        @return false;
+    }
 
     $selectors: ();
 

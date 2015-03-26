@@ -16,7 +16,11 @@
 
     // Check if the scope has already been created
     @if scope-exists($scope) {
-        @error '`#{$scope}` scope has already been created';
+        @if $bem-throw-errors {
+            @error '`#{$scope}` scope has already been created';
+        }
+
+        @return false;
     }
 
     // Initialize a new scope map
