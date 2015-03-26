@@ -1,0 +1,5 @@
+{
+  "name": "BEM Constructor",
+  "description": "A Sass library for building immutable and namespaced BEM-style CSS objects",
+  "tags": ["bem", "selectors", "library", "immutable", "css", "compass", "constructor", "namespaces", "objects"]
+}
