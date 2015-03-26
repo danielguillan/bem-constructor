@@ -1,36 +1,9 @@
 // -----------------------------------------------------------------------------
 // BEM constructor
 // -----------------------------------------------------------------------------
-// Table of contents
-// 1. Default settings
-// 2. Imports
-
-// -----------------------------------------------------------------------------
-// 1. Default settings
-// -----------------------------------------------------------------------------
-
-/// Use namespaced class names
-/// @public
-$bem-use-namespaces: true !default;
-
-/// Bem style element separator
-/// @public
-$bem-element-separator: '__' !default;
-
-/// Bem style modifier separator
-/// @public
-$bem-modifier-separator: '--' !default;
-
-/// Throw errors
-/// @public
-$bem-throw-errors: true !default;
 
 
-
-// -----------------------------------------------------------------------------
-// 2. Imports
-// -----------------------------------------------------------------------------
-
+@import 'defaults';
 @import 'logger';
 @import 'error-checks';
 @import 'block';

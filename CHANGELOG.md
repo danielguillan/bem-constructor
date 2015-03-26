@@ -1,3 +1,7 @@
+## 0.3
+
+* Single file dist build
+
 ## 0.2
 
 * Fix wrong selector namespacing when hack() is called within a modifies-element() context

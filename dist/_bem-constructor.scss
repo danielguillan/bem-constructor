@@ -1,0 +1,732 @@
+/*! bem-constructor - v0.2.0 - 2015-03-26 */
+// -----------------------------------------------------------------------------
+// Defaults
+// -----------------------------------------------------------------------------
+
+/// Use namespaced class names
+/// @public
+$bem-use-namespaces: true !default;
+
+/// Bem style element separator
+/// @public
+$bem-element-separator: '__' !default;
+
+/// Bem style modifier separator
+/// @public
+$bem-modifier-separator: '--' !default;
+
+/// Throw errors
+/// @public
+$bem-throw-errors: true !default;
+
+// -----------------------------------------------------------------------------
+// Global Logger
+// -----------------------------------------------------------------------------
+
+/// Stores the whole BEM structure
+$_bem-log: () !global;
+
+// -----------------------------------------------------------------------------
+// Context logger
+// -----------------------------------------------------------------------------
+// Table of contents:
+// 1. Store current context
+// 2. Clear current context
+
+
+/// Used to stores the current object being constructed
+/// @private
+
+$_bem-current-context: () !global;
+
+
+// -----------------------------------------------------------------------------
+// 1. Store current context
+// -----------------------------------------------------------------------------
+
+/// Sets the current object, stores name and generated selector
+
+@function set-current-context($obj, $name, $selector) {
+    $new-current: (#{$obj}: (name: $name, selector: $selector));
+    $_bem-current-context: map-merge($_bem-current-context, $new-current) !global;
+
+    @return $selector;
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Clear current context
+// -----------------------------------------------------------------------------
+
+/// Clears the current object
+
+@function unset-current-context($obj) {
+    $new-current: (#{$obj}: null);
+    $_bem-current-context: map-merge($_bem-current-context, $new-current) !global;
+
+    @return null;
+}
+
+// -----------------------------------------------------------------------------
+// Block Logger
+// -----------------------------------------------------------------------------
+
+/// Find if a given $block has already been created
+/// @param {String} $block - Name of the block
+
+@function block-exists($block) {
+    @return map-has-key($_bem-log, $block);
+}
+
+/// Log the new $block
+/// @param {String} $block - Block name
+
+@function _bem-log-block($block) {
+
+    // Check if the block has already been created
+    @if block-exists($block) {
+        @error '`#{$block}` block has already been created';
+    }
+
+    // Initialize a new block map
+    $new-block: ($block: ('elements': (), 'modifiers': ()));
+
+    // Update bem log with new block
+    $_bem-log: map-merge($_bem-log, $new-block) !global;
+
+    // Everything OK
+    @return true;
+}
+
+// -----------------------------------------------------------------------------
+// Element Logger
+// -----------------------------------------------------------------------------
+
+/// Find if the given $elements have already been created
+/// @param {Arglist | String} $elements - A single or multiple element names
+
+@function element-exists($elements...) {
+
+    // Get the current block name
+    // Then get the current block map
+    // Then get the current block element map
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-elements: map-get($current-block, 'elements');
+
+    @each $element in $elements {
+        @if map-has-key($current-elements, $element) {
+            @return true;
+        }
+    }
+
+    @return false;
+}
+
+
+/// Log the new $elements
+/// @param {Arglist | String} $elements - A single or multiple element names
+
+@function _bem-log-element($elements...) {
+
+    // Check any $elements has already been defined for the current block
+    @if element-exists($elements...) {
+        @error 'One or more elements from `#{inspect($elements)}` have already been created';
+    }
+
+    // Find the current block name
+    // Then get the map for the current block
+    // Then get the element list
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-elements: map-get($current-block, 'elements');
+
+    // For each possible name in $name
+    // Create an updated block map
+    // Add it to the list of elements
+    @each $element in $elements {
+        $updated: ($element: ('modifiers': ()));
+        $current-elements: map-merge($current-elements, $updated);
+    }
+
+    // Update the block
+    $updated-block: ($current-block-name: ('elements': ($current-elements), 'modifiers': map-get($current-block, 'modifiers')));
+
+    // Update the log
+    $_bem-log: map-merge($_bem-log, $updated-block) !global;
+
+    @return true;
+}
+
+// -----------------------------------------------------------------------------
+// Modifier Logger
+// -----------------------------------------------------------------------------
+
+/// Find if the given $modifiers have already been created
+/// @param {Arglist | String} $modifiers - A single or multiple modifier names
+
+@function modifier-exists($modifiers...) {
+
+    // Get the current block name
+    // Then get the current block map
+    // Then get the current block modifiers map
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-modifiers: map-get($current-block, 'modifiers');
+
+    @each $modifier in $modifiers {
+        @if map-has-key($current-modifiers, $modifier) {
+            @return true;
+        }
+    }
+
+    @return false;
+}
+
+/// Log the new $modifiers
+/// @param {Arglist | String} $modifiers - A single or multiple modifier names
+
+
+@function _bem-log-modifier($modifiers...) {
+
+    // Check if the modifier has already been defined for the current block or element
+    @if modifier-exists($modifiers...) {
+        @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+    }
+
+    // Find the current block name
+    $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
+    $current-item-name: $current-block-name;
+
+    // Get the map for the current block
+    $current-block: map-get($_bem-log, $current-block-name);
+    $current-item: $current-block;
+
+    // Get the map for the current block modifiers
+    $current-block-modifiers: map-get($current-block, 'modifiers');
+    $current-item-modifiers: $current-block-modifiers;
+
+    // Check whether the current context is a block or an element
+    $context-type: if(map-get($_bem-current-context, 'element') == null, 'block', 'element');
+
+    // Update item modifier list if within an Element
+    @if $context-type == 'element' {
+        // @todo: should work if there are multiple current items
+        $current-item-name: nth(map-get(map-get($_bem-current-context, 'element'), 'name'),1);
+        $current-item: map-get(map-get($current-block, 'elements'), $current-item-name);
+        $current-item-modifiers: map-get($current-item, 'modifiers');
+    }
+
+    // For each possible name in $name
+    @each $modifier in $modifiers {
+
+        // Create an updated block/element map
+        $updated: ();
+
+        @if $context-type == 'element' {
+            $updated: (#{$modifier}: ('modified-by': ()))
+        } @else {
+            $modifies-element: map-get($_bem-current-context, 'modifies-element');
+            $updated: (#{$modifier}: ('modifies-element': ()));
+        }
+
+        // Add it to the list of modifiers
+        $current-item-modifiers: map-merge($current-item-modifiers, $updated);
+    }
+
+    $updated-block: ();
+
+    @if $context-type == 'element' {
+        // update the element map;
+        $updated-item: (#{$current-item-name}: ('modifiers': $current-item-modifiers));
+        // @error $updated-item;
+        $updated-elements: map-merge(map-get($current-block, 'elements'), $updated-item);
+        $updated-block: (#{$current-block-name}: ('modifiers': map-get($current-block, 'modifiers'), 'elements': $updated-elements));
+    } @else {
+        $updated-block: (#{$current-block-name}: ('modifiers': ($current-item-modifiers), 'elements': map-get($current-block, 'elements')));;
+    }
+
+    // // Update the log
+    $_bem-log: map-merge($_bem-log, $updated-block) !global;
+
+    @return true;
+
+}
+
+// -----------------------------------------------------------------------------
+// Scope Logger
+// -----------------------------------------------------------------------------
+
+/// Find if a given $scope has already been created
+/// @param {String} $scope - Name of the scope
+
+@function scope-exists($scope) {
+    @return map-has-key($_bem-log, $scope);
+}
+
+/// Log the new $scope
+/// @param {String} $scope - scope name
+
+@function _bem-log-scope($scope) {
+
+    // Check if the scope has already been created
+    @if scope-exists($scope) {
+        @error '`#{$scope}` scope has already been created';
+    }
+
+    // Initialize a new scope map
+    $new-scope: ($scope: ());
+
+    // Update bem log with new scope
+    $_bem-log: map-merge($_bem-log, $new-scope) !global;
+
+    // Everything OK
+    @return true;
+}
+
+// -----------------------------------------------------------------------------
+// Error checks
+// -----------------------------------------------------------------------------
+// Table of contents:
+// 1. Within
+// 2. Outside
+
+// -----------------------------------------------------------------------------
+// 1. Within
+// -----------------------------------------------------------------------------
+
+/// Checks that it's being created within all of the passed $objs...
+@function _should-be-called-within($objs...) {
+
+    $found: false;
+
+    @each $obj in $objs {
+        @if map-get($_bem-current-context, $obj) != null {
+            $found: true;
+        }
+    }
+
+    @if not $found {
+        @if ($bem-throw-error) {
+            @error 'It should be called within #{inspect($objs)}';
+        }
+
+        @return false;
+    }
+
+    @return true;
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Outside
+// -----------------------------------------------------------------------------
+
+/// Checks that it's being created outside all of the passed $objs...
+@function _should-not-be-called-within($objs...) {
+
+    $found: false;
+
+    @each $obj in $objs {
+        @if map-get($_bem-current-context, $obj) != null {
+            $found: true;
+        }
+    }
+
+    @if $found {
+        @if ($bem-throw-error) {
+            @error 'It should not be called within #{inspect($objs)}';
+        }
+        @return false;
+    }
+
+    @return true;
+}
+
+// -----------------------------------------------------------------------------
+// Block constructor
+// -----------------------------------------------------------------------------
+
+/// Set namespaces for each block type
+/// @public
+
+$bem-block-namespaces: (
+    'utility': 'u',
+    'object': 'o',
+    'component': 'c',
+) !default;
+
+/// Initializes a new block object
+/// @private
+/// @param {String} $block  - Name for the new block
+/// @param {String} $type   - Block type: (utility, object or component)
+/// @returns The final selector for the new block object
+
+@function _block($name, $type) {
+
+    // Log new block
+    $new-block: _bem-log-block($name);
+
+    // Error check
+    $outside-check: should-not-be-called-within('scope', 'block');
+
+    // Set namespace
+    $namespace: '';
+
+    @if $bem-use-namespaces {
+        @if not map-has-key($bem-block-namespaces, $type) {
+            @error '`#{$type}` is not a valid `$type` for `block()`';
+        }
+        $namespace: map-get($bem-block-namespaces, $type) + '-';
+    }
+
+    $selector: '.' + $namespace + $name;
+    $set-current: set-current-context('block', $name, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates a block object with the given type
+/// @param {String} $block  - Name for the new block
+/// @param {String} $type   - Block type: (utility, object or component)
+
+@mixin block($name, $type) {
+
+    // Write block selector
+    @at-root #{_block($name, $type)} {
+        @content;
+    }
+
+    // Clear $_bem-current-context block after creation
+    $unset-current: unset-current-context('block');
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Utility alias
+// -----------------------------------------------------------------------------
+
+@mixin utility($name) {
+    @include block($name, 'utility') {
+        @content;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 3. Object alias
+// -----------------------------------------------------------------------------
+
+@mixin object($name) {
+  @include block($name, 'object') {
+    @content;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// 4. Component alias
+// -----------------------------------------------------------------------------
+
+@mixin component($name) {
+  @include block($name, 'component') {
+    @content;
+  }
+}
+
+// ----------------------------------------------------------------------
+// Element constructor
+// ----------------------------------------------------------------------
+
+/// Initializes a new element for the current block
+/// @private
+/// @param {String | Arglist} $elements - List of new element names
+/// @returns The final selector for the new element(s)
+
+@function _element($elements...) {
+
+    // Log new element(s)
+    $new-element: _bem-log-element($elements...);
+
+    // Error checks
+    $inside-check: should-be-called-within('block');
+    $outside-check: should-not-be-called-within('modifier', 'state', 'element');
+
+    $selector: ();
+
+    @each $element in $elements {
+        $e: #{&}#{$bem-element-separator}#{$element};
+        $selector: append($selector, $e, 'comma');
+    }
+
+    $set-current: set-current-context('element', $elements, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates new element(s)
+/// @param {String | Arglist} $elements  - Name of the new element(s)
+
+@mixin element($elements...) {
+
+    @at-root #{_element($elements...)} {
+        @content;
+    }
+
+    // Clear $_bem-current-context element after creation
+    $unset-current: unset-current-context('element');
+}
+
+// ----------------------------------------------------------------------
+// Modifier constructor
+// ----------------------------------------------------------------------
+
+/// Initializes a new modifier for the current block or element(s)
+/// @private
+/// @param {String | Arglist} $modifiers - List of new modifier names
+/// @returns The final selector for the new modifier(s)
+
+
+@function _modifier($modifiers...) {
+
+    // Log new modifier(s)
+    $new-modifier: _bem-log-modifier($modifiers...);
+
+    // Error checks
+    $inside-check: _should-be-called-within('block');
+    $outside-check: _should-not-be-called-within('modifier');
+
+    $selector: ();
+
+    @each $modifier in $modifiers {
+        $new-selector: ();
+
+        @each $sel in & {
+            $modified-selector: #{$sel}#{$bem-modifier-separator}#{$modifier};
+            $new-selector: append($new-selector, $modified-selector, 'comma');
+        }
+
+        $selector: append($selector, $new-selector, 'comma');
+    }
+
+    $set-current: set-current-context('modifier', $modifiers, $selector);
+
+    @return $selector;
+}
+
+
+/// Creates new modifier(s)
+/// @param {String | Arglist} $modifiers  - Name of the new modifier(s)
+
+@mixin modifier($modifiers...) {
+
+    @at-root #{_modifier($modifiers...)} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('modifier');
+}
+
+// ----------------------------------------------------------------------
+// Element modifier
+// ----------------------------------------------------------------------
+
+/// Scopes the @content ruleset to an element of the block being modified
+/// @private
+/// @param {String | Arglist} $modified-elements - List of elements that should be modified
+/// @returns The final selector for the element(s) modified by the block modifier
+
+@function _modifies-element($modified-elements...) {
+
+    $inside-check: should-be-called-within('modifier', 'state');
+    $outside-check: should-not-be-called-within('element');
+
+    $selectors: ();
+
+    @each $element in $modified-elements {
+        $element: map-get(map-get($_bem-current-context, 'block'), 'selector') + $bem-element-separator + $element;
+        $selectors: append($selectors, $element, 'comma');
+    }
+
+    $selector: selector-nest(&, $selectors);
+
+    $set-current: set-current-context('modifies-element', $modified-elements, $selector);
+
+    @return $selector;
+}
+
+
+/// Scopes the @content ruleset to an element of the block being modified
+/// @param {String | Arglist} $modified-elements - Name of the element(s) that should be modified
+
+@mixin modifies-element($modified-elements...) {
+    @at-root #{_modifies-element($modified-elements...)} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('modifies-element');
+}
+
+// -----------------------------------------------------------------------------
+// Scope constructor
+// -----------------------------------------------------------------------------
+
+/// Set namespace for scopes
+/// @public
+
+$bem-scope-namespace: 's';
+
+/// Initializes a new scope object
+/// @private
+/// @param {String} $scope  - Name for the new scope
+/// @returns The final selector for the new scope object
+
+@function _scope($scope) {
+
+    // Log new block
+    $new-scope: _bem-log-scope($scope);
+
+    // Check it's not called inside another scope
+    // and it's called at the root-level
+    $recursive-check: should-not-be-called-recursively('scope');
+    $outside-check: should-not-be-called-within('block');
+
+    $namespace: if($bem-use-namespaces, $bem-scope-namespace + '-', '');
+    $selector: '.' + $namespace + $scope;
+
+    $set-current: set-current-context('scope', $scope, $selector);
+
+    @return $selector;
+}
+
+@mixin scope($scope) {
+
+    @at-root #{_scope($scope)} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('scope');
+}
+
+// -----------------------------------------------------------------------------
+// Theme constructor
+// -----------------------------------------------------------------------------
+
+$bem-theme-namespace: 't' !default;
+
+@function _theme($themes...) {
+
+    // If you try to hack a hack you can break the internet.
+    // So please, no one try it.
+    $recursive-test: should-not-be-called-recursively('theme');
+
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $bem-theme-namespace + '-', '');
+
+    @each $theme in $themes {
+        @each $sel in & {
+            $t: selector-nest('.#{$namespace}#{$theme}', $sel);
+            $selector: append($selector, $t, 'comma');
+        }
+    }
+
+    $set-current: set-current-context('theme', $themes, $selector);
+
+    @return $selector;
+}
+
+@mixin theme($themes...) {
+
+    @at-root #{_theme($themes...)} {
+      @content;
+    }
+
+    $unset-current: unset-current-context('theme');
+}
+
+// -----------------------------------------------------------------------------
+// State constructor
+// -----------------------------------------------------------------------------
+
+$state-namespace: 'is' !default;
+
+@function _state($states...) {
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $state-namespace + '-', '');
+
+    @each $state in $states {
+      $s: selector-append(&, '.#{$namespace}#{$state}');
+      $selector: append($selector, $s, 'comma');
+    }
+
+    $set-current: set-current-context('state', $states, $selector);
+
+    @return $selector;
+}
+
+@mixin state($states...) {
+
+    @at-root #{_state($states...)} {
+      @content;
+    }
+
+    $unset-state: unset-current-context('state');
+}
+
+// -----------------------------------------------------------------------------
+// 11. Hack constructor
+// -----------------------------------------------------------------------------
+
+/// Hack namespace prepended to the selector
+$hack-namespace: '_' !default;
+
+/// Find the last simple selector in a selector
+@function _last-simple-selector($selector) {
+    $parsed: selector-parse($selector);
+
+    @if length($parsed) > 1 {
+      @error '`#{$selector}` contains #{length($parsed)} selectors and the `_last-simple-selector()`function accepts only 1.';
+    }
+    $last-simple-selector: nth(nth($parsed, 1), -1);
+
+    @return $last-simple-selector;
+}
+
+@function _hack() {
+
+    // You may not hack a hack
+    $recursive-check: should-not-be-called-recursively('hack');
+
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $hack-namespace, '');
+
+    // Check if we are hacking an element modified by a block modifier
+    $is-hack-element: not not map-get($_bem-current-context, 'modifies-element');
+    $selectors: if($is-hack-element, map-get(map-get($_bem-current-context, 'modifies-element'), 'selector'), &);
+
+    // @todo refactor the following code to something more readab
+    @each $s in $selectors {
+        $selector-to-str: inspect(if($is-hack-element, _last-simple-selector($s), nth($s, 1)));
+        $selector-without-dot: str-slice($selector-to-str, 2, -1);
+        $new-selector: '.' + $namespace + $selector-without-dot;
+        $sl: selector-replace($s, if($is-hack-element, $selector-to-str, nth($s, 1)), $new-selector);
+        $selector: append($selector, $sl, 'comma');
+    }
+
+    $set-current: set-current-context('hack', 'some-hack', $selector);
+
+    @return $selector;
+
+}
+
+@mixin hack() {
+
+    @at-root #{_hack()} {
+        @content;
+    }
+
+    $unset-current: unset-current-context('hack');
+
+}

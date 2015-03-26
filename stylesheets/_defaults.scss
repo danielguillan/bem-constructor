@@ -1,0 +1,19 @@
+// -----------------------------------------------------------------------------
+// Defaults
+// -----------------------------------------------------------------------------
+
+/// Use namespaced class names
+/// @public
+$bem-use-namespaces: true !default;
+
+/// Bem style element separator
+/// @public
+$bem-element-separator: '__' !default;
+
+/// Bem style modifier separator
+/// @public
+$bem-modifier-separator: '--' !default;
+
+/// Throw errors
+/// @public
+$bem-throw-errors: true !default;
