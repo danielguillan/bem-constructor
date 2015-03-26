@@ -1,6 +1,6 @@
 {
     "name": "bem-constructor",
-    "version": "0.3",
+    "version": "0.3.0",
     "main": "dist/_bem-constructor.scss",
     "author": "Daniel Guillan",
     "ignore": ["*","!dist/_bem-constructor.scss"]
