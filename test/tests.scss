@@ -1,0 +1,17 @@
+$bem-throw-errors: false;
+
+@import "bootcamp";
+@import "../stylesheets/bem-constructor";
+
+@include runner-start;
+
+@import "specs/block";
+@import "specs/element";
+@import "specs/modifier";
+@import "specs/scope";
+@import "specs/theme";
+@import "specs/hack";
+@import "specs/state";
+@import "specs/modifies-element";
+
+@include runner-end;

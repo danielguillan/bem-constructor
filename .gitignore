@@ -1,3 +1,5 @@
 Gemfile.lock
 *.gem
-tests/.sass-cache
+test/.sass-cache
+node_modules
+tmp

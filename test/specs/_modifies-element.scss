@@ -1,0 +1,46 @@
+@include describe("The _modifies-element function") {
+
+    @include it("should generate a modifier selector for the given element within  the current block") {
+        @include block('modifies-element-test-block', 'object') {
+            @include element('element');
+            @include modifier('modifier') {
+                @include should( expect( #{_modifies-element('element')} ), to( be( '.o-modifies-element-test-block--modifier .o-modifies-element-test-block__element' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a modifier selector for the given elements within  the current block") {
+        @include block('modifies-element-test-block2', 'object') {
+            @include element('element1', 'element2');
+            @include modifier('modifier') {
+                @include should( expect( #{_modifies-element('element1', 'element2')} ), to( be( '.o-modifies-element-test-block2--modifier .o-modifies-element-test-block2__element1, .o-modifies-element-test-block2--modifier .o-modifies-element-test-block2__element2' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a state modifier selector for the given elements within  the current block") {
+        @include block('modifies-element-test-block3', 'object') {
+            @include element('element1', 'element2');
+            @include state('state') {
+                @include should( expect( #{_modifies-element('element1', 'element2')} ), to( be( '.o-modifies-element-test-block3.is-state .o-modifies-element-test-block3__element1, .o-modifies-element-test-block3.is-state .o-modifies-element-test-block3__element2' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('block');
+        }
+    }
+
+    @include it("should generate a theme modifier selector for the given elements within  the current block") {
+        @include block('modifies-element-test-block4', 'object') {
+            @include element('element1', 'element2');
+            @include theme('theme') {
+                @include should( expect( #{_modifies-element('element1', 'element2')} ), to( be( '.t-theme .o-modifies-element-test-block4 .o-modifies-element-test-block4__element1, .t-theme .o-modifies-element-test-block4 .o-modifies-element-test-block4__element2' )));
+            }
+            $unset-current: unset-current-context('state');
+            $unset-current: unset-current-context('block');
+        }
+    }
+}

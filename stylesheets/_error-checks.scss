@@ -21,7 +21,11 @@
     }
 
     @if not $found {
-        @error 'It should be called within #{inspect($objs)}';
+        @if ($bem-throw-error) {
+            @error 'It should be called within #{inspect($objs)}';
+        }
+
+        @return false;
     }
 
     @return true;
@@ -35,16 +39,20 @@
 /// Checks that it's being created outside all of the passed $objs...
 @function _should-not-be-called-within($objs...) {
 
-  $found: false;
+    $found: false;
 
-  @each $obj in $objs {
-    @if map-get($_bem-current-context, $obj) != null {
-      $found: true;
+    @each $obj in $objs {
+        @if map-get($_bem-current-context, $obj) != null {
+            $found: true;
+        }
     }
-  }
-  @if $found {
-    @error 'It should not be called within #{inspect($objs)}';
-  }
 
-  @return true;
+    @if $found {
+        @if ($bem-throw-error) {
+            @error 'It should not be called within #{inspect($objs)}';
+        }
+        @return false;
+    }
+
+    @return true;
 }
