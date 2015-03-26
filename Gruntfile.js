@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                banner: '/*! <%= pkg.name %> - version : <%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
             },
 
             dist: {
@@ -43,6 +43,24 @@ module.exports = function(grunt) {
                 ],
                 dest: '<%= dir.dist %>/_<%= pkg.name %>.scss',
             },
+        },
+
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json', 'lib/bem-constructor.rb', 'dist/_bem-constructor.scss'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Bump version %VERSION%',
+                commitFiles: ['package.json', 'bower.json', 'lib/bem-constructor.rb', 'dist/_bem-constructor.scss'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'upstream',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                prereleaseName: 'pre',
+                regExp: new RegExp('([\'|\"]?[version|VERSION][\'|\"]?[ ]*[:|=][ ]*[\'|\"]?)(\\d+\\.\\d+\\.\\d+(-\\.\\d+)?(-\\d+)?)[\\d||A-a|.|-]*([\'|\"]?)', 'i')
+            }
         },
 
         bootcamp: {
@@ -79,10 +97,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('bootcamp');
 
     grunt.registerTask('test', ['sass', 'bootcamp']);
     grunt.registerTask('dev', ['test', 'watch']);
     grunt.registerTask('build', ['test', 'concat']);
+
+    var versionBump = grunt.option('versionBump') || 'minor';
+    grunt.registerTask('release', ['build', 'bump-only:' + versionBump, 'bump-commit']);
 }
 
