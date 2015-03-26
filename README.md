@@ -1,10 +1,11 @@
-# BEM Constructor
+# BEM Constructor [![Build Status](https://travis-ci.org/danielguillan/bem-constructor.svg?branch=master)](https://travis-ci.org/danielguillan/bem-constructor)
 
 BEM Constructor is a Sass library for building immutable and namespaced BEM-style CSS objects.
 
 By enforcing a consistent and programatic way of defining objects (blocks, elements and modifiers) it ensures a more structured, robust and secure object codebase that is easy to understand and maintain. Objects defined using the constructor are impossible to modify and reassign by mistake or omission.
 
 Jump to [:hamburger: The Burger Example™](#example) to see the mixins in action.
+
 
 ## Key ideas
 
