@@ -9,7 +9,7 @@
 // 1. Within
 // -----------------------------------------------------------------------------
 
-/// Checks that it's being created within all of the passed $objs...
+/// Checks that it's being created within any of the passed $objs...
 @function _should-be-called-within($objs...) {
 
     @each $obj in $objs {
