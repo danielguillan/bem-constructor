@@ -9,10 +9,11 @@
 
 @function _modifies-element($modified-elements...) {
 
-    $inside-check: _should-be-called-within('modifier', 'state');
+    $inside-check: _should-be-called-within('modifier', 'state', 'theme');
     $outside-check: _should-not-be-called-within('element');
 
-    @if $inside-check == 'false' or $outside-check == false {
+    // Return false in case error throwing is disabled
+    @if $inside-check == false or $outside-check == false {
         @return false;
     }
 
@@ -23,7 +24,9 @@
         $selectors: append($selectors, $element, 'comma');
     }
 
-    $selector: selector-nest(&, $selectors);
+    $block: selector-append(&...);
+
+    $selector: selector-nest($block, '>', $selectors);
 
     $set-current: set-current-context('modifies-element', $modified-elements, $selector);
 

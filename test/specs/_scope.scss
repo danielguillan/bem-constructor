@@ -1,8 +1,18 @@
 @include describe("The _scope function") {
 
+    $_bem-current-context: () !global;
+
     @include it("should generate a scope namespaced selector") {
         @include should( expect( #{_scope('name')} ), to( be( '.s-name' )));
-        $unset-current: unset-current-context('scope');
+    }
+
+
+    $_bem-current-context: () !global;
+
+    @include it("should return false or throw error if scope is created within a block") {
+        @include block('block', 'object') {
+            @include should( expect( _scope('scope') ), to( be( false )));
+        }
     }
 
 }

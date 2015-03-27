@@ -1,33 +1,33 @@
 @include describe("The _theme function") {
 
+    $_bem-current-context: () !global;
+
     @include it("should generate a theme namespaced selector for a given block") {
-        @include block('theme-test-block', 'object') {
-            @include should( expect( #{_theme('theme')} ), to( be( '.t-theme .o-theme-test-block' )));
+        @include block('block', 'object') {
+            @include should( expect( #{_theme('theme')} ), to( be( '.t-theme .o-block' )));
         }
-        $unset-current: unset-current-context('theme');
-        $unset-current: unset-current-context('block');
     }
+
+
+    $_bem-current-context: () !global;
 
     @include it("should generate a theme namespaced selector for multiple selectors") {
-        @include block('theme-test-block2', 'object') {
+        @include block('block', 'object') {
             @include element('element1', 'element2') {
-                @include should( expect( #{_theme('theme')} ), to( be( '.t-theme .o-theme-test-block2__element1, .t-theme .o-theme-test-block2__element2' )));
+                @include should( expect( #{_theme('theme')} ), to( be( '.t-theme .o-block__element1, .t-theme .o-block__element2' )));
             }
         }
-        $unset-current: unset-current-context('theme');
-        $unset-current: unset-current-context('element');
-        $unset-current: unset-current-context('block');
     }
 
+
+    $_bem-current-context: () !global;
+
     @include it("should generate multiple theme namespaced selector for multiple selectors") {
-        @include block('theme-test-block3', 'object') {
+        @include block('block', 'object') {
             @include element('element1', 'element2') {
-                @include should( expect( #{_theme('theme1', 'theme2')} ), to( be( '.t-theme1 .o-theme-test-block3__element1, .t-theme1 .o-theme-test-block3__element2, .t-theme2 .o-theme-test-block3__element1, .t-theme2 .o-theme-test-block3__element2' )));
+                @include should( expect( #{_theme('theme1', 'theme2')} ), to( be( '.t-theme1 .o-block__element1, .t-theme1 .o-block__element2, .t-theme2 .o-block__element1, .t-theme2 .o-block__element2' )));
             }
         }
-        $unset-current: unset-current-context('theme');
-        $unset-current: unset-current-context('element');
-        $unset-current: unset-current-context('block');
     }
 
 }

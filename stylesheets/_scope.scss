@@ -17,10 +17,13 @@ $bem-scope-namespace: 's';
     // Log new block
     $new-scope: _bem-log-scope($scope);
 
-    // Check it's not called inside another scope
-    // and it's called at the root-level
-    $recursive-check: should-not-be-called-recursively('scope');
-    $outside-check: should-not-be-called-within('block');
+    // Error checks
+    $outside-check: _should-not-be-called-within('block', 'scope');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     $namespace: if($bem-use-namespaces, $bem-scope-namespace + '-', '');
     $selector: '.' + $namespace + $scope;

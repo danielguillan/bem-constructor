@@ -13,15 +13,16 @@
 @function _should-be-called-within($objs...) {
 
     @each $obj in $objs {
-        @if map-get($_bem-current-context, $obj) == null {
-            @if $bem-throw-errors {
-                @error 'It should be called within #{inspect($objs)}';
-            }
-            @return false;
+        @if map-get($_bem-current-context, $obj) != null {
+            @return true;
         }
     }
 
-    @return true;
+    @if $bem-throw-errors {
+        @error 'It should be called within #{inspect($objs)}';
+    }
+
+    @return false;
 }
 
 

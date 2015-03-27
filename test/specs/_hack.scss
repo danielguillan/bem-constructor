@@ -1,52 +1,51 @@
 @include describe("The _hack function") {
 
+    $_bem-current-context: () !global;
+
     @include it("should generate a hack selector for the current block") {
-        @include block('hack-test-block', 'object') {
-            @include should( expect( #{_hack()} ), to( be( '._o-hack-test-block' )));
-            $unset-current: unset-current-context('hack');
-            $unset-current: unset-current-context('block');
+        @include block('block', 'object') {
+            @include should( expect( #{_hack()} ), to( be( '._o-block' )));
         }
     }
+
+
+    $_bem-current-context: () !global;
 
     @include it("should generate a hack selector for multiple selectors") {
-        @include block('hack-test-block2', 'object') {
+        @include block('block', 'object') {
             @include element('element1', 'element2') {
-                @include should( expect( #{_hack()} ), to( be( '._o-hack-test-block2__element1, ._o-hack-test-block2__element2' )));
+                @include should( expect( #{_hack()} ), to( be( '._o-block__element1, ._o-block__element2' )));
             }
-            $unset-current: unset-current-context('hack');
-            $unset-current: unset-current-context('element');
-            $unset-current: unset-current-context('block');
         }
     }
 
+
+    $_bem-current-context: () !global;
+
     @include it("should generate a hack selector for the element of a modified block") {
-        @include block('hack-test-block3', 'object') {
+        @include block('block', 'object') {
             @include element('element');
             @include modifier('modifier') {
                 @include modifies-element('element') {
-                    @include should( expect( #{_hack()} ), to( be( '.o-hack-test-block3--modifier ._o-hack-test-block3__element' )));
+                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier > ._o-block__element' )));
                 }
             }
         }
-        $unset-current: unset-current-context('hack');
-        $unset-current: unset-current-context('element');
-        $unset-current: unset-current-context('modifier');
-        $unset-current: unset-current-context('block');
     }
 
+
+    $_bem-current-context: () !global;
+
     @include it("should generate a hack selectors for multiple elements of a modified block") {
-        @include block('hack-test-block4', 'object') {
+        @include block('block', 'object') {
             @include element('element1');
             @include element('element2');
             @include modifier('modifier') {
                 @include modifies-element('element1', 'element2') {
-                    @include should( expect( #{_hack()} ), to( be( '.o-hack-test-block4--modifier ._o-hack-test-block4__element1, .o-hack-test-block4--modifier ._o-hack-test-block4__element2' )));
+                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier > ._o-block__element1, .o-block--modifier > ._o-block__element2' )));
                 }
             }
         }
-        $unset-current: unset-current-context('hack');
-        $unset-current: unset-current-context('element');
-        $unset-current: unset-current-context('modifier');
-        $unset-current: unset-current-context('block');
     }
+
 }

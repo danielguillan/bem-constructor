@@ -1,33 +1,41 @@
 @include describe("The _block function") {
 
+    $_bem-current-context: () !global;
+
     @include it("should generate a object namespaced selector for a given block") {
-        @include should( expect( _block('block1', 'object') ), to( be( '.o-block1' )));
-        $unset-current: unset-current-context('block');
+        @include should( expect( _block('block', 'object') ), to( be( '.o-block' )));
     }
+
+
+    $_bem-current-context: () !global;
 
     @include it("should generate a component namespaced selector for a given block") {
-        @include should( expect( _block('block2', 'component') ), to( be( '.c-block2' )));
-        $unset-current: unset-current-context('block');
+        @include should( expect( _block('block', 'component') ), to( be( '.c-block' )));
     }
+
+
+    $_bem-current-context: () !global;
 
     @include it("should generate a utility namespaced selector for a given block") {
-        @include should( expect( _block('block3', 'utility') ), to( be( '.u-block3' )));
-        $unset-current: unset-current-context('block');
+        @include should( expect( _block('block', 'utility') ), to( be( '.u-block' )));
     }
+
+
+    $_bem-current-context: () !global;
 
     @include it("should return false or throw error if block is created within another block") {
-        @include block('block4', 'object') {
-            @include should( expect( _block('block5', 'object') ), to( be( false )));
+        @include block('block', 'object') {
+            @include should( expect( _block('block', 'object') ), to( be( false )));
         }
-        $unset-current: unset-current-context('block');
     }
 
+
+    $_bem-current-context: () !global;
+
     @include it("should return false or throw error if block is created within a scope") {
-        @include scope('block-test-scope') {
-            @include should( expect( _block('block6', 'object') ), to( be( false )));
+        @include scope('scope') {
+            @include should( expect( _block('block', 'object') ), to( be( false )));
         }
-        $unset-current: unset-current-context('block');
-        $unset-current: unset-current-context('scope');
     }
 
 }
