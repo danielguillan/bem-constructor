@@ -30,13 +30,13 @@
 @function _bem-log-modifier($modifiers...) {
 
     // Check if the modifier has already been defined for the current block or element
-    @if modifier-exists($modifiers...) {
-        @if $bem-throw-errors {
-            @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
-        }
+    // @if modifier-exists($modifiers...) {
+    //     @if $bem-throw-errors {
+    //         @error 'One or more elements from `#{inspect($modifiers)}` have already been created';
+    //     }
 
-        @return false;
-    }
+    //     @return false;
+    // }
 
     // Find the current block name
     $current-block-name: map-get(map-get($_bem-current-context, 'block'), 'name');
