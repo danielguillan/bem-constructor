@@ -1,3 +1,7 @@
+## 0.5
+
+* Fix bug where repeating a modifier threw an error.
+
 ## 0.4
 
 * Improved modifies-element() output using direct child selector.
