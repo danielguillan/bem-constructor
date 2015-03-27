@@ -1,4 +1,4 @@
-/*! bem-constructor - version : 0.3.2 - 2015-03-26 */
+/*! bem-constructor - version : 0.4.0 - 2015-03-27 */
 // -----------------------------------------------------------------------------
 // Defaults
 // -----------------------------------------------------------------------------
@@ -314,15 +314,16 @@ $_bem-current-context: () !global;
 @function _should-be-called-within($objs...) {
 
     @each $obj in $objs {
-        @if map-get($_bem-current-context, $obj) == null {
-            @if $bem-throw-errors {
-                @error 'It should be called within #{inspect($objs)}';
-            }
-            @return false;
+        @if map-get($_bem-current-context, $obj) != null {
+            @return true;
         }
     }
 
-    @return true;
+    @if $bem-throw-errors {
+        @error 'It should be called within #{inspect($objs)}';
+    }
+
+    @return false;
 }
 
 
@@ -561,10 +562,11 @@ $bem-block-namespaces: (
 
 @function _modifies-element($modified-elements...) {
 
-    $inside-check: _should-be-called-within('modifier', 'state');
+    $inside-check: _should-be-called-within('modifier', 'state', 'theme');
     $outside-check: _should-not-be-called-within('element');
 
-    @if $inside-check == 'false' or $outside-check == false {
+    // Return false in case error throwing is disabled
+    @if $inside-check == false or $outside-check == false {
         @return false;
     }
 
@@ -575,7 +577,9 @@ $bem-block-namespaces: (
         $selectors: append($selectors, $element, 'comma');
     }
 
-    $selector: selector-nest(&, $selectors);
+    $block: selector-append(&...);
+
+    $selector: selector-nest($block, '>', $selectors);
 
     $set-current: set-current-context('modifies-element', $modified-elements, $selector);
 
@@ -613,10 +617,13 @@ $bem-scope-namespace: 's';
     // Log new block
     $new-scope: _bem-log-scope($scope);
 
-    // Check it's not called inside another scope
-    // and it's called at the root-level
-    $recursive-check: should-not-be-called-recursively('scope');
-    $outside-check: should-not-be-called-within('block');
+    // Error checks
+    $outside-check: _should-not-be-called-within('block', 'scope');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     $namespace: if($bem-use-namespaces, $bem-scope-namespace + '-', '');
     $selector: '.' + $namespace + $scope;
