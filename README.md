@@ -17,7 +17,7 @@ Some CSS objects in your project shouldn't be able to change (mutate). They have
 
 ### 2. Namespacing
 
-Objects have a clear function. Whether they are components, utilities o dirty hacks, we need a consistent way of telling them apart. By namespacing objects, our UI code becomes more transparent and understandable.  BEM Constructor supports the following object types:
+Objects have a clear function. Whether they are components, utilities, or dirty hacks, we need a consistent way of telling them apart. By namespacing objects, our UI code becomes more transparent and understandable.  BEM Constructor supports the following object types:
 
 - Objects
 - Components
