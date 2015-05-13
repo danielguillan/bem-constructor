@@ -1,3 +1,7 @@
+## 0.6
+
+* Fix error-checks in Hack and Theme modules.
+
 ## 0.5
 
 * Fix bug where repeating a modifier threw an error.
