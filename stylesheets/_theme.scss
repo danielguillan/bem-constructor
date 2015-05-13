@@ -8,7 +8,12 @@ $bem-theme-namespace: 't' !default;
 
     // If you try to hack a hack you can break the internet.
     // So please, no one try it.
-    $recursive-test: should-not-be-called-recursively('theme');
+    $outside-check: _should-not-be-called-within('theme');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     $selector: ();
     $namespace: if($bem-use-namespaces, $bem-theme-namespace + '-', '');
