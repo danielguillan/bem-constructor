@@ -23,7 +23,12 @@ $hack-namespace: '_' !default;
 @function _hack() {
 
     // You may not hack a hack
-    $recursive-check: should-not-be-called-recursively('hack');
+    $outside-check: _should-not-be-called-within('hack');
+
+    // Return false in case error throwing is disabled
+    @if $outside-check == false {
+        @return false;
+    }
 
     $selector: ();
     $namespace: if($bem-use-namespaces, $hack-namespace, '');
