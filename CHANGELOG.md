@@ -1,3 +1,7 @@
+## 0.7
+
+* Allowing modifies-element() to be called within blocks.
+
 ## 0.6
 
 * Fix error-checks in Hack and Theme modules.
