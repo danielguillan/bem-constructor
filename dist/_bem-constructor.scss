@@ -1,4 +1,4 @@
-/*! bem-constructor - version : 0.6.0 - 2015-05-13 */
+/*! bem-constructor - version : 0.7.0 - 2015-06-21 */
 // -----------------------------------------------------------------------------
 // Defaults
 // -----------------------------------------------------------------------------
@@ -562,7 +562,7 @@ $bem-block-namespaces: (
 
 @function _modifies-element($modified-elements...) {
 
-    $inside-check: _should-be-called-within('modifier', 'state', 'theme');
+    $inside-check: _should-be-called-within('block', 'modifier', 'state', 'theme');
     $outside-check: _should-not-be-called-within('element');
 
     // Return false in case error throwing is disabled
