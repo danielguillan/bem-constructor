@@ -9,7 +9,8 @@ $bem-state-namespace: 'is' !default;
     $namespace: if($bem-use-namespaces, $bem-state-namespace + '-', '');
 
     @each $state in $states {
-      $s: selector-append(&, '.#{$namespace}#{$state}');
+      $ss: &; // Workaround for libsass
+      $s: selector-append($ss, '.#{$namespace}#{$state}');
       $selector: append($selector, $s, 'comma');
     }
 

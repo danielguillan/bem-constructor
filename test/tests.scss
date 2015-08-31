@@ -13,5 +13,6 @@ $bem-throw-errors: false;
 @import "specs/hack";
 @import "specs/state";
 @import "specs/modifies-element";
+@import "specs/suffix";
 
 @include runner-end;

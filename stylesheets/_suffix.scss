@@ -1,0 +1,51 @@
+// -----------------------------------------------------------------------------
+// suffix constructor
+// -----------------------------------------------------------------------------
+
+/// Suffix namespace
+$bem-suffix-namespace: '\\@' !default;
+
+@function _suffix($suffixes...) {
+    $selector: ();
+    $namespace: if($bem-use-namespaces, $bem-suffix-namespace, '');
+
+    // Checking if the suffix is being set within a state.
+    // If so, disallow and throw an error.
+    // @TODO Allow suffixes to be set within states
+
+    @if map-has-key($_bem-current-context, state) and map-get($_bem-current-context, state) != null {
+        @error 'Currently, suffixes cannot be set within states. Move the suffix declaration outside the state constructor.';
+    }
+
+    @each $suffix in $suffixes {
+        @each $sel in & {
+
+            // Checking if the selector is composed of 3 elements. If that's the case,
+            // we're dealing with an element being modified by a block modifier.
+            // In that case, we need to add the suffix to the block too.
+            // @TODO Find a better way to deal with this situation.
+
+                @if length($sel) == 3 {
+                    $tmp: append((), nth($sel, 1) + '#{$namespace}#{$suffix}', space);
+                    $tmp: append($tmp, nth($sel, 2), space);
+                    $tmp: append($tmp, nth($sel, 3), space);
+                    $sel: #{$tmp};
+                }
+            $s: $sel + '#{$namespace}#{$suffix}';
+            $selector: append($selector, $s, 'comma');
+        }
+    }
+
+    $set-current: set-current-context('suffix', $suffixes, $selector);
+
+    @return $selector;
+}
+
+@mixin suffix($suffixes...) {
+
+    @at-root #{_suffix($suffixes...)} {
+      @content;
+    }
+
+    $unset-suffix: unset-current-context('suffix');
+}

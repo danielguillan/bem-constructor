@@ -24,7 +24,8 @@
         $selectors: append($selectors, $element, 'comma');
     }
 
-    $block: selector-append(&...);
+    $s: &; // Workaround for libsass
+    $block: selector-append($s...);
 
     $selector: selector-nest($block, '>', $selectors);
 

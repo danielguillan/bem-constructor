@@ -1,0 +1,107 @@
+@include describe("The _suffix function") {
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a block suffix") {
+        @include block('block', 'object') {
+            @include should( expect( #{_suffix('large')} ), to( be( '.o-block\\@large' )));
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a element suffix") {
+        @include block('block', 'object') {
+            @include element('foo') {
+                @include should( expect( #{_suffix('large')} ), to( be( '.o-block__foo\\@large' )));
+            }
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a block modifier suffix") {
+        @include block('block', 'object') {
+            @include modifier('foo') {
+                @include should( expect( #{_suffix('large')} ), to( be( '.o-block--foo\\@large' )));
+            }
+        }
+    }
+
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a element modifier suffix") {
+        @include block('block', 'object') {
+            @include element('foo') {
+                @include modifier('bar') {
+                    @include should( expect( _suffix('large') ), to( be( '.o-block__foo--bar\\@large' )));
+                }
+            }
+        }
+    }
+
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a block to element modifier suffix") {
+        @include block('block', 'object') {
+            @include modifier('foo') {
+                @include modifies-element('bar') {
+                    @include should( expect( #{_suffix('large')} ), to( be( '.o-block--foo\\@large > .o-block__bar\\@large' )));
+                }
+            }
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a suffix block within a theme") {
+        @include block('block', 'object') {
+            @include theme('foo') {
+                @include should( expect( _suffix('large') ), to( be( '.t-foo .o-block\\@large' )));
+            }
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a suffix hack") {
+        @include block('block', 'object') {
+            @include hack {
+                @include should( expect( _suffix('large') ), to( be( '._o-block\\@large' )));
+            }
+        }
+    }
+
+    // @TODO Uncomment once suffixes are allowed within states
+    //
+    // $_bem-current-context: () !global;
+    //
+    // @include it("should generate a suffix block with a state") {
+    //     @include block('block', 'object') {
+    //         @include state('visible') {
+    //             @include should( expect( #{_suffix('large')} ), to( be( '.o-block\\@large.is-visible' )));
+    //         }
+    //     }
+    // }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a suffix block with a state") {
+        @include block('block', 'object') {
+            @include suffix('large') {
+                @include should( expect( #{_state('visible')} ), to( be( '.o-block\\@large.is-visible' )));
+            }
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a scope namespaced selector") {
+        @include scope('name') {
+            @include should( expect( #{_suffix('large')} ), to( be( '.s-name\\@large' )));
+        }
+    }
+
+}

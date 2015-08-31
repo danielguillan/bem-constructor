@@ -1,3 +1,7 @@
+## 1.0.0
+
+* New feature: Responsive suffixes support.
+
 ## 0.9
 
 * Renamed state namespace configurable variable to `$bem-state-namespace`.
