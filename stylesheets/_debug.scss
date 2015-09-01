@@ -1,0 +1,102 @@
+// -----------------------------------------------------------------------------
+// Debug
+// -----------------------------------------------------------------------------
+// Table of contents:
+// 1. Classes
+// 2. Elements
+// 3. Modifiers
+// 4. Objects
+// 5. Components
+// 6. Hacks
+
+$bem-debug-styles: (
+    'classes'    : 5px solid #ddd,
+    'modifiers'  : 5px solid #aaa,
+    'elements'   : 5px solid #111,
+    'objects'    : 5px solid #FFDC00,
+    'components' : 5px solid #FF851B,
+    'utilities'  : 5px solid #0074D9,
+    'hacks'      : 5px solid #FF4136,
+) !default;
+
+@mixin bem-debug($targets...) {
+
+    // If no targets are given, show them all.
+    $show_all: length($targets) == 0;
+
+    // -----------------------------------------------------------------------------
+    // 1. Classes
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'classes') or $show_all {
+        [class] {
+          outline: map-get($bem-debug-styles, 'classes');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 2. Elements
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'elements') or $show_all {
+        [class*="#{$bem-element-separator}"] {
+          outline: map-get($bem-debug-styles, 'elements');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 3. Modifiers
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'modifiers') or $show_all {
+        [class*="#{$bem-modifier-separator}"] {
+          outline: map-get($bem-debug-styles, 'modifiers');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 3. Objects
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'objects') or $show_all {
+        $c: map-get($bem-block-namespaces, 'object') + '-';
+        [class^="#{$c}"],
+        [class*=" #{$c}"] {
+          outline: map-get($bem-debug-styles, 'objects');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 4. Components
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'components') or $show_all {
+        $c: map-get($bem-block-namespaces, component) + '-';
+        [class^="#{$c}"],
+        [class*=" #{$c}"] {
+          outline: map-get($bem-debug-styles, 'components');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 5. Utilities
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'utilities') or $show_all {
+        $c: map-get($bem-block-namespaces, utility) + '-';
+        [class^="#{$c}"],
+        [class*=" #{$c}"] {
+          outline: map-get($bem-debug-styles, 'utilities');
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // 6. Hacks
+    // -----------------------------------------------------------------------------
+
+    @if not not index($targets, 'hacks') or $show_all {
+        [class^="#{$hack-namespace}"] {
+          outline: map-get($bem-debug-styles, 'hacks');
+        }
+    }
+}

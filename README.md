@@ -267,6 +267,33 @@ The compiled CSS:
     .o-burger.is-cold { taste: terrible; }
 ````
 
-## This is overkill, who is this for?
+## Visual debugger
 
-If constructing objects programatically seems too verbose or abstract to you that's perfectly OK. This tool is not for everybody. However if you need to enforce a strict way of writing BEM objects in your project, want to make sure they won't mutate and thus produce more secure CSS, then this tool might help you.
+![BEM constructor visual debugger](https://raw.githubusercontent.com/danielguillan/bem-constructor/master/visual-debugger.png)
+
+Perform a visual healthcheck against your UI using the debugger mixin.
+
+### bem-debug($targets...)
+
+````scss
+@include bem-debug('modifiers', 'components'); // Outlines all modifiers and components
+````
+
+
+Available targets are `classes`,`modifiers`,`elements`,`objects`,`components`,`utilities` and `hacks`.
+
+Use it empty to outline all target types: `@include bem-debug();`
+
+Customize outline styles by overriding the `$bem-debug-styles` map.
+
+````scss
+$bem-debug-styles: (
+    'classes'    : 5px solid #ddd,
+    'modifiers'  : 5px solid #aaa,
+    'elements'   : 5px solid #111,
+    'objects'    : 5px solid #FFDC00,
+    'components' : 5px solid #FF851B,
+    'utilities'  : 5px solid #0074D9,
+    'hacks'      : 5px solid #FF4136,
+);
+```
