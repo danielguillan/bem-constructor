@@ -1,0 +1,41 @@
+* {
+  margin: 0 0 15px; }
+
+html {
+  font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+body {
+  max-width: 500px;
+  padding: 10%; }
+
+h1 {
+  margin-bottom: 40px; }
+
+div {
+  padding: 10px; }
+
+[class] {
+  outline: 5px solid #ddd; }
+
+[class*="__"] {
+  outline: 5px solid #111; }
+
+[class*="--"] {
+  outline: 5px solid #aaa; }
+
+[class^="o-"],
+[class*=" o-"] {
+  outline: 5px solid #FFDC00; }
+
+[class^="c-"],
+[class*=" c-"] {
+  outline: 5px solid #FF851B; }
+
+[class^="u-"],
+[class*=" u-"] {
+  outline: 5px solid #0074D9; }
+
+[class^="_"] {
+  outline: 5px solid #FF4136; }
+
+/*# sourceMappingURL=style.css.map */
