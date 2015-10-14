@@ -1,6 +1,6 @@
 {
-  "name": "bem-constructor",
-  "author": "Daniel Guillan",
+  "name": "sass-bem-constructor",
+  "author": "Daniel Guillan <daniel.guillan@gmail.com> (http://danielguillan.com/)",
   "version": "0.7.1",
   "scripts": {
     "test": "grunt test"
