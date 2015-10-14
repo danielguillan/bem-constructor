@@ -36,7 +36,7 @@ BEM objects are composed of a block and any number of elements and/or modifiers.
 
 ## Installation
 
-There are 3 ways of installing BEM Constructor:
+There are 4 ways of installing BEM Constructor:
 
 ### Download
 
@@ -48,6 +48,13 @@ Run the following command:
 
     bower install --save-dev bem-constructor
 
+### NPM
+
+Run the following command:
+
+    npm install sass-bem-constructor --save-dev
+
+    
 ### Compass extension
 
 1. `gem install bem-constructor`
