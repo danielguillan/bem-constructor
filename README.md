@@ -1,4 +1,4 @@
-# BEM Constructor [![Build Status](https://travis-ci.org/danielguillan/bem-constructor.svg?branch=master)](https://travis-ci.org/danielguillan/bem-constructor) [![Bower version](https://badge.fury.io/bo/bem-constructor.svg)](http://badge.fury.io/bo/bem-constructor) [![Gem Version](https://badge.fury.io/rb/bem-constructor.svg)](http://badge.fury.io/rb/bem-constructor)
+# BEM Constructor [![Build Status](https://travis-ci.org/danielguillan/bem-constructor.svg?branch=master)](https://travis-ci.org/danielguillan/bem-constructor) [![npm version](https://badge.fury.io/js/sass-bem-constructor.svg)](https://badge.fury.io/js/sass-bem-constructor) [![Bower version](https://badge.fury.io/bo/bem-constructor.svg)](http://badge.fury.io/bo/bem-constructor) [![Gem Version](https://badge.fury.io/rb/bem-constructor.svg)](http://badge.fury.io/rb/bem-constructor)
 
 BEM Constructor is a Sass library for building immutable and namespaced BEM-style CSS objects.
 
@@ -54,7 +54,7 @@ Run the following command:
 
     npm install sass-bem-constructor --save-dev
 
-    
+
 ### Compass extension
 
 1. `gem install bem-constructor`
