@@ -2,11 +2,11 @@
 // State constructor
 // -----------------------------------------------------------------------------
 
-$state-namespace: 'is' !default;
+$bem-state-namespace: 'is' !default;
 
 @function _state($states...) {
     $selector: ();
-    $namespace: if($bem-use-namespaces, $state-namespace + '-', '');
+    $namespace: if($bem-use-namespaces, $bem-state-namespace + '-', '');
 
     @each $state in $states {
       $s: selector-append(&, '.#{$namespace}#{$state}');
