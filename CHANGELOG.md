@@ -1,3 +1,15 @@
+## 0.9
+
+* Renamed state namespace configurable variable to `$bem-state-namespace`.
+
+## 0.8
+
+* Added npm package.
+
+## 0.7.1
+
+* Added the visual debugger.
+
 ## 0.7
 
 * Allowing modifies-element() to be called within blocks.
