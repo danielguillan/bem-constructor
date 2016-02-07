@@ -34,6 +34,10 @@ Read [Harry's post on namespaces](http://csswizardry.com/2015/03/more-transparen
 
 BEM objects are composed of a block and any number of elements and/or modifiers. Using the BEM syntax for naming classes you'll produce structured code that helps you and other developers understand at a glance the relationship between those classes. The BEM constructor takes care of generating bem-compliant selectors.
 
+### 4. Responsive suffixes
+
+With [responsive suffixes](http://csswizardry.com/2015/08/bemit-taking-the-bem-naming-convention-a-step-further/) you are able to denote conditional states or breakpoints where permutations to an object may occur. This is specially useful when dealing with media queries that *modify* the base values of a give UI element.
+
 ## Installation
 
 There are 4 ways of installing BEM Constructor:
@@ -134,6 +138,15 @@ Scopes allow you to isolate code you don't have control over.
 
     @include scope($name) { ... }
 
+
+### suffix($name)
+
+Adds a suffix
+
+Denotes a conditional breakpoint that modifies the properties and/or values of an UI
+
+    @include suffix($name) { ... }
+
 ## Options
 
 ### Namespaces
@@ -158,6 +171,10 @@ Override the default state namespace:
 
     $bem-state-namespace: 'has'; // defaults to 'is'
 
+Override the default suffix namespace:
+
+    $bem-suffix-namespace: '-at-'; // defaults to ''\\@''
+
 Override the default hack namespace:
 
     $bem-hack-namespace: 'it-wasnt-me-'; // defaults to '_'
@@ -170,14 +187,22 @@ By default BEM Constructor uses the following BEM convention:
 - Two underscores (__) for elements
 - Two hyphens for modifiers (--).
 
-You can customize them to whatever fits you needs:
+You can customize them to whatever fits your needs:
 
     $bem-element-separator: '-'; // Defaults to '__'
 
     $bem-modifier-separator: '-_-_'; // Defaults to '--'
 
+### Suffixes
 
-##<a name="example"></a> :hamburger: The Burger Example™
+By default BEM Constructor uses `@` to denote suffixes (e.g. `.o-media@large`).
+
+You can customize the suffix to whatever fits your needs:
+
+    $bem-suffix-namespace: '---'; defaults to '\\@'
+
+
+## <a name="example"></a> :hamburger: The Burger Example™
 
 
 *Disclaimer: the following Sass code may not compile into a real burger.*
