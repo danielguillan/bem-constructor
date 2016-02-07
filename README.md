@@ -255,6 +255,10 @@ You can customize the suffix to whatever fits your needs:
         @include state('cold') {
             taste: terrible;
         }
+
+        @include suffix('children') {
+            size: mini;
+        }
     }
 ````
 
@@ -297,6 +301,10 @@ The compiled CSS:
 
     /* And we're all sad when a burger Is Cold */
     .o-burger.is-cold { taste: terrible; }
+
+    /* Mini burgers for children */
+    .o-burger\@children { size: mini }
+
 ````
 
 ## Visual debugger
