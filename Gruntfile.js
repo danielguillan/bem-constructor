@@ -40,6 +40,8 @@ module.exports = function(grunt) {
                     '<%= dir.src %>/_theme.scss',
                     '<%= dir.src %>/_state.scss',
                     '<%= dir.src %>/_hack.scss',
+                    '<%= dir.src %>/_debug.scss',
+                    '<%= dir.src %>/_suffix.scss',
                 ],
                 dest: '<%= dir.dist %>/_<%= pkg.name %>.scss',
             },
@@ -108,4 +110,3 @@ module.exports = function(grunt) {
     var versionBump = grunt.option('versionBump') || 'minor';
     grunt.registerTask('release', ['build', 'bump-only:' + versionBump, 'bump-commit']);
 }
-
