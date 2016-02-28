@@ -36,7 +36,7 @@ BEM objects are composed of a block and any number of elements and/or modifiers.
 
 ### 4. Responsive suffixes
 
-With [responsive suffixes](http://csswizardry.com/2015/08/bemit-taking-the-bem-naming-convention-a-step-further/) you are able to denote conditional states or breakpoints where permutations to an object may occur. This is specially useful when dealing with media queries that *modify* the base values of a give UI element.
+With [responsive suffixes](http://csswizardry.com/2015/08/bemit-taking-the-bem-naming-convention-a-step-further/) you are able to denote conditional states or breakpoints where permutations to an object may occur. This is specially useful when dealing with media queries that *modify* the base values of a given UI element.
 
 ## Installation
 
