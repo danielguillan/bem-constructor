@@ -106,7 +106,7 @@ Creates a new modifier of the parent block or element. Should always be nested w
 
 ### modifies-element($modified-elements...)
 
-When declaring a block modifier, a theme a state or a hack you may need to target and modify some of the block elements too. Use the following mixin to scope the ruleset to those elements.
+When declaring a block modifier, a theme, a state or a hack you may need to target and modify some of the block elements too. Use the following mixin to scope the ruleset to those elements.
 
     @include modifies-element($modified-elements...) { ... }
 
