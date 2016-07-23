@@ -288,13 +288,13 @@ The compiled CSS:
     .o-burger--veggie { texture: smooth; }
 
     /* Veggie Burger block modifier modifies the Meat element too */
-    .o-burger--veggie > .o-burger__meat { type: lentils; }
+    .o-burger--veggie .o-burger__meat { type: lentils; }
 
     /* Veggie Burger block modifier modifies the Extra Topping element too */
-    .o-burger--veggie > .o-burger__extra-topping { ingredient: avocado; }
+    .o-burger--veggie .o-burger__extra-topping { ingredient: avocado; }
 
     /* But as hackers we couldn't resist the urge to add some Bacon back */
-    .o-burger--veggie > ._o-burger__extra-topping { ingredient: bacon; }
+    .o-burger--veggie ._o-burger__extra-topping { ingredient: bacon; }
 
     /* When the party Theme is Mexican, we make everything spicy */
     .t-mexican .o-burger { spicy: hell-yeah; }

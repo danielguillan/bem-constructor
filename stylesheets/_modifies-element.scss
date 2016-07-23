@@ -27,7 +27,7 @@
     $s: &; // Workaround for libsass
     $block: selector-append($s...);
 
-    $selector: selector-nest($block, '>', $selectors);
+    $selector: selector-nest($block, $selectors);
 
     $set-current: set-current-context('modifies-element', $modified-elements, $selector);
 
