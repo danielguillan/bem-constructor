@@ -48,7 +48,7 @@
         @include block('block', 'object') {
             @include modifier('foo') {
                 @include modifies-element('bar') {
-                    @include should( expect( #{_suffix('large')} ), to( be( '.o-block--foo\\@large > .o-block__bar\\@large' )));
+                    @include should( expect( #{_suffix('large')} ), to( be( '.o-block--foo\\@large .o-block__bar\\@large' )));
                 }
             }
         }
@@ -63,6 +63,34 @@
             }
         }
     }
+
+    $_bem-current-context: () !global;
+
+    @include it("should generate a suffix block to element modifier within a theme") {
+        @include block('block', 'object') {
+            @include theme('foo') {
+                @include modifier('bar') {
+                    @include modifies-element('baz') {
+                        @include should( expect( _suffix('large') ), to( be( '.t-foo .o-block--bar\\@large .o-block__baz\\@large' )));
+                    }
+                }
+            }
+        }
+    }
+
+    $_bem-current-context: () !global;
+
+    // @include it("should generate a suffix block to element modifier within a scope") {
+    //     @include scope('foo') {
+    //         @include block('block', 'object') {
+    //             @include modifier('bar') {
+    //                 @include modifies-element('baz') {
+    //                     @include should( expect( _suffix('large') ), to( be( '.s-foo .o-block--bar\\@large .o-block__baz\\@large' )));
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     $_bem-current-context: () !global;
 

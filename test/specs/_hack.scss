@@ -27,7 +27,7 @@
             @include element('element');
             @include modifier('modifier') {
                 @include modifies-element('element') {
-                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier > ._o-block__element' )));
+                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier ._o-block__element' )));
                 }
             }
         }
@@ -42,7 +42,7 @@
             @include element('element2');
             @include modifier('modifier') {
                 @include modifies-element('element1', 'element2') {
-                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier > ._o-block__element1, .o-block--modifier > ._o-block__element2' )));
+                    @include should( expect( #{_hack()} ), to( be( '.o-block--modifier ._o-block__element1, .o-block--modifier ._o-block__element2' )));
                 }
             }
         }
