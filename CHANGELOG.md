@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Stopped making assumptions of the structure of the markup by removing the direct descendant selector (`>`) for elements.
+
 ## 1.0.0
 
 * New feature: Responsive suffixes support.
