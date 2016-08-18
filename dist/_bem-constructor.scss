@@ -1,4 +1,4 @@
-/*! sass-bem-constructor - version : 1.1.0 - 2016-02-07 */
+/*! sass-bem-constructor - version : 1.1.0 - 2016-08-18 */
 // -----------------------------------------------------------------------------
 // Defaults
 // -----------------------------------------------------------------------------
@@ -580,7 +580,7 @@ $bem-block-namespaces: (
     $s: &; // Workaround for libsass
     $block: selector-append($s...);
 
-    $selector: selector-nest($block, '>', $selectors);
+    $selector: selector-nest($block, $selectors);
 
     $set-current: set-current-context('modifies-element', $modified-elements, $selector);
 
@@ -903,17 +903,36 @@ $bem-suffix-namespace: '\\@' !default;
     @each $suffix in $suffixes {
         @each $sel in & {
 
-            // Checking if the selector is composed of 3 elements. If that's the case,
+            // Checking if the selector is composed of 2 elements. If that's the case,
             // we're dealing with an element being modified by a block modifier.
             // In that case, we need to add the suffix to the block too.
             // @TODO Find a better way to deal with this situation.
+            $in-element: false;
 
-                @if length($sel) == 3 {
+            @if (map-has-key($_bem-current-context, 'theme')
+             or map-has-key($_bem-current-context, 'scope')) {
+                $in-element: true;
+            }
+
+            @if length($sel) == 2 {
+                @if ($in-element) {
+                    $tmp: append((), nth($sel, 1), space);
+                    $tmp: append($tmp, nth($sel, 2), space);
+                    $sel: #{$tmp};
+                } @else {
                     $tmp: append((), nth($sel, 1) + '#{$namespace}#{$suffix}', space);
                     $tmp: append($tmp, nth($sel, 2), space);
+                    $sel: #{$tmp};
+                }
+            } @else if (length($sel) == 3) {
+                @if ($in-element) {
+                    $tmp: append((), nth($sel, 1), space);
+                    $tmp: append($tmp, nth($sel, 2) + '#{$namespace}#{$suffix}', space);
                     $tmp: append($tmp, nth($sel, 3), space);
                     $sel: #{$tmp};
                 }
+            }
+
             $s: $sel + '#{$namespace}#{$suffix}';
             $selector: append($selector, $s, 'comma');
         }
