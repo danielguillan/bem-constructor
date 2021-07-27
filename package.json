@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/danielguillan/bem-constructor",
   "devDependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.3.0",
     "grunt-contrib-sass": "^0.8.1",
     "bootcamp": "^1.1.7",
     "grunt-contrib-watch": "^0.6.1",
