@@ -55,7 +55,7 @@ $bem-block-namespaces: (
 /// @param {String} $block  - Name for the new block
 /// @param {String} $type   - Block type: (utility, object or component)
 
-@mixin block($name, $type) {
+@mixin block($name, $type: '') {
 
     // Write block selector
     @at-root #{_block($name, $type)} {
